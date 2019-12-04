@@ -1,4 +1,5 @@
 from card import Card
+from random import shuffle
 
 class Deck:
 
@@ -10,3 +11,9 @@ class Deck:
     def print_deck(self):
         for card in self.deck:
             print(card,end="\n")
+    
+    def draw(self):
+        return self.deck.pop(0)
+    
+    def shuffle(self):
+        shuffle(self.deck)
