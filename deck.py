@@ -8,6 +8,9 @@ class Deck:
     def __init__(self):
         self.deck = [Card(rank,suit) for rank in range(1,14) for suit in self.suit]
 
+    def load_deck(self):
+        return [Card(rank,suit) for rank in range(1,14) for suit in self.suit]
+ 
     def print_deck(self):
         for card in self.deck:
             print(card,end="\n")
@@ -17,3 +20,8 @@ class Deck:
     
     def shuffle(self):
         shuffle(self.deck)
+    
+    def reload(self):
+        self.deck.clear()
+        self.deck = self.load_deck()
+        self.shuffle()

@@ -6,9 +6,11 @@ class Hand:
         self.hand.append(card)
 
     def hand_size(self):
-        return len(hand)
+        return len(self.hand)
     
     def print_hand(self):
         for card in self.hand:
             print(card)
-
+    
+    def reset_hand(self):
+        self.hand.clear()

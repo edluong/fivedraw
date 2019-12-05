@@ -19,7 +19,8 @@ def main():
     
     draw_hand(player_hand)
     draw_hand(cpu_hand)
-
+    
+    print('\n')
     print('Your Hand:',end='\n')
     player_hand.print_hand()
    
@@ -27,6 +28,7 @@ def main():
 
     print("CPU's Hand: ",end='\n')
     cpu_hand.print_hand()
+    print('\n')
 
 if __name__ == "__main__":
     
@@ -35,7 +37,14 @@ if __name__ == "__main__":
     while True:
         answer = input('Type "d" to draw; "q" to quit: ')
         if answer.lower() == 'd':
+            # reset everything
+            d.reload()
+            player_hand.reset_hand()
+            cpu_hand.reset_hand()
+            
+            # load up the hands again 
             main()
+
         elif answer.lower() == 'q':
             break
         else:
