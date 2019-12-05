@@ -1,22 +1,33 @@
 from deck import Deck
+from hand import Hand
+
 # set up
-hand = []
+
+player_hand = Hand()
+cpu_hand = Hand()
+# prepare the deck
+
 d = Deck()
 d.shuffle()
 
-def draw_hand():
+def draw_hand(hand):
     for _ in range(5):
-        hand.append(d.draw())
+        hand.add_card(d.draw())
 
 def main():
     
-    print('Your Hand:',end='\n')
     
-    draw_hand()
+    draw_hand(player_hand)
+    draw_hand(cpu_hand)
 
-    for card in hand:
-        print(card)
-    
+    print('Your Hand:',end='\n')
+    player_hand.print_hand()
+   
+    print('\n')
+
+    print("CPU's Hand: ",end='\n')
+    cpu_hand.print_hand()
+
 if __name__ == "__main__":
     
     main()
