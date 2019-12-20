@@ -1,24 +1,26 @@
 from game import Game
-
-game = Game(1,2,0)
-
-game.update_turn_state(2)
-
-print(game.current_turn_state())
-
-player_bet = 10
-
-print('Player Bet: {}'.format(player_bet))
+import unittest
 
 
-game.add_pot_size(player_bet)
 
-print('Adding new player bet...')
-print('{} should be the same as {}'.format(game.current_pot_size(),player_bet))
 
-print('Resetting everything..')
+class TestGame(unittest.TestCase):
+    
+    def setUp(self):
+        self.game = Game(1,2,0) # turn_state, player count, pot size
+    
+    def test_update_turn_state(self): 
+       self.game.update_turn_state(2) 
+       self.assertEqual('deal',self.game.current_turn_state()) 
+    
+    def test_add_pot_size(self):
+        self.game.add_pot_size(10)
+        self.assertEqual(10,self.game.current_pot_size())
 
-game.reset_game()
+    def test_reset_game(self):
+        self.game.reset_game()
+        self.assertEqual(0,self.game.current_pot_size())
+        self.assertEqual('predeal',self.game.current_turn_state())
 
-print(game.current_pot_size())
-print('{} should be predeal'.format(game.current_turn_state()))
+    if __name__ == '__main__':
+        unittest.main()
