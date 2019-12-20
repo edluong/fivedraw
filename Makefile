@@ -5,7 +5,7 @@ run:
 test:
 	@python3 -m unittest
 test-deck:
-	@python3 test_deck.py
+	@python3 -m unittest test_deck
 
 test-hand:
 	@python3 -m unittest test_hand 
