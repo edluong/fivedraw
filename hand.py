@@ -14,3 +14,6 @@ class Hand:
     
     def reset_hand(self):
         self.hand.clear()
+    
+    def get_hand(self):
+        return self.hand
