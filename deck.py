@@ -25,3 +25,6 @@ class Deck:
         self.deck.clear()
         self.deck = self.load_deck()
         self.shuffle()
+    
+    def deck_size(self):
+        return len(self.deck)
