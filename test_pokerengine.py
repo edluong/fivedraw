@@ -4,7 +4,7 @@ import constants as con
 import pokerengine as pe
 import test_hand_constants as hc
 
-class TestPokerEngine(unittest.TestCase):
+class TestHandRankings(unittest.TestCase):
     
     def test_high_card(self):
         rank_desc = 'high card'
@@ -62,6 +62,34 @@ class TestPokerEngine(unittest.TestCase):
         rank_desc = 'straight flush'
         result = (rank_desc, con.RANKING[rank_desc])
         self.assertEqual(pe._hand_rank(hc.straight_flush), result)
+
+class TestWinningHand(unittest.TestCase):
+
+    def test_pair_vs_trips(self):
+        players = []
+        
+        players.append(hc.pair)
+        players.append(hc.trips)
+
+        _winning_desc = 'trips'
+        self.assertEqual(pe.winninghand(players),(hc.trips, _winning_desc))
+    
+    def test_multiple_players(self):
+        players = []
+        
+        players.append(hc.pair)
+        players.append(hc.two_pair)
+        players.append(hc.trips)
+        players.append(hc.full_house)
+
+        _winning_desc = 'full house'
+        self.assertEqual(pe.winninghand(players),(hc.full_house, _winning_desc))
+    
+    def test_same_ranking_high_card(self):
+        pass
+
+    def test_tied_hand(self):
+        pass
 
 if __name__ == '__main___':
     unittest.main()

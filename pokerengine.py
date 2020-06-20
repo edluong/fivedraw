@@ -1,4 +1,4 @@
-# TODO - need to fix winning hand to return a tuple
+# TODO - fix winninghand() to resolve ties ex: high card vs high card
 
 import constants as con
 
@@ -80,18 +80,24 @@ def _hand_rank(hand):
 def winninghand(players):
     '''
     Takes an array of players hands and finds the best hand
-    Eventually return the player's hand that won
 
     Parameters:
     argument1 (array): this will be an array of hand objects
 
     Returns:
-    tuple: (winning hand, hand rank)
+    tuple: (winning hand, hand rank desc)
 
-    ([(10,'D'),(J,'D')(Q,'D')(K,'D')(A,'D')], 'Straight Flush')
+    ([(10,'D'),(J,'D')(Q,'D')(K,'D')(A,'D')], 'straight flush')
     '''
-    result = None
-    for hand in enumerate(players, 1):
-        # label the players with numbers
-        player_no, cards = hand
-        return _hand_rank(cards)
+    _max_rank_strength = 0
+    _max_hand = None
+    
+    for hand in players:
+        hand_rank = _hand_rank(hand)
+        
+        desc, rank_strength = hand_rank
+        
+        if rank_strength > _max_rank_strength:
+            _max_rank_strength = rank_strength
+            _max_hand = hand
+    return (hand, desc)
