@@ -57,14 +57,9 @@ def winninghand(players):
             else:
                 raise Exception('calculation error for full house or two pair')
         else:
+            # checking if all the suit values are the same
             if len(set(suits)) == 1:
-                if _isStraight(ranks):
-                    result = 'straight flush'
-                else:
-                    result = 'flush'
+                result = 'straight flush' if _isStraight(ranks) else 'flush'
             else:
-                if _isStraight(ranks):
-                    result = 'straight'
-                else:
-                    result = 'nothing'
+                result = 'straight' if _isStraight(ranks) else 'nothing'
     return result
