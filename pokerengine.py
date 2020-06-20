@@ -44,11 +44,11 @@ def winninghand(players):
         }
 
         # only one "pair" type is in the dict
-        if len(rank_counts.keys()) == 1:
+        if len(rank_counts) == 1:
             # taking the max because there is only one value
             result = _pair_results[max(rank_counts.values())]
         # two different types of "pairs"
-        elif len(rank_counts.keys()) == 2:
+        elif len(rank_counts) == 2:
             # checking if pair dict values contain a 2 and 3 
             # in other words, need 3 of a kind AND a pair
             # https://stackoverflow.com/a/6159329/4376173
