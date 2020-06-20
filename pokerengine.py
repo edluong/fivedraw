@@ -25,20 +25,9 @@ def winninghand(players):
     for hand in enumerate(players,1):
         # label the players with numbers
         player_no, cards = hand
-        
-        #print(player_no)
-        #print(cards)
-        
-        # unzip the cards array for easier checking of grouping
-        
-#         groups = [[suit for rank,suit in cards],
-#                   [rank for rank,suit in cards]]
-        
+                
         suits = [suit for rank,suit in cards]
         ranks = [rank for rank,suit in cards]
-#         print(f'suits: {suits}')
-#         print(f'ranks: {ranks}')
-        
       
         # need to get the counts of each element
         # compare the counts of the highest groups
@@ -47,11 +36,9 @@ def winninghand(players):
         for rank in ranks:
             if ranks.count(rank) > 1:
                 rank_counts[rank] = ranks.count(rank)
-#         print(rank_counts)
         
         # only one "pair" type is in the dict
         if len(rank_counts.keys()) == 1:
-            #print(rank_counts.values())
             if 3 in rank_counts.values():
                 result = 'trips'
             elif 4 in rank_counts.values():
