@@ -1,5 +1,3 @@
-# TODO - write a test for wheel straight ex: A,2,3,4,5
-# TODO - fix edge case for wheel straight
 # TODO - refactor this code
 
 def _isStraight(rank_list):
@@ -9,8 +7,14 @@ def _isStraight(rank_list):
     if these are equal then it is consecutive
     inspiration: https://www.geeksforgeeks.org/python-check-if-list-contains-consecutive-numbers/
     '''
-    return sorted(rank_list) == list(range(min(rank_list),max(rank_list) + 1))
+    smallest_rank = min(rank_list)
+    largest_rank = max(rank_list)
+    recreate_rank_list = list(range(smallest_rank, largest_rank + 1))
 
+    # special case for wheel, 'A2345'
+    STRAIGHT_WHEEL = [2,3,4,5,14]
+
+    return sorted(rank_list) == recreate_rank_list or sorted(rank_list) == STRAIGHT_WHEEL
 
 def winninghand(players):
     '''

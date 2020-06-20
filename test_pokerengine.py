@@ -29,6 +29,18 @@ class TestPokerEngine(unittest.TestCase):
         player_hands = []
         player_hands.append(hc.straight)
         self.assertEqual(pe.winninghand(player_hands), 'straight')
+    
+    # A2345
+    def test_straight_wheel(self):
+        player_hands = []
+        player_hands.append(hc.straight_wheel)
+        self.assertEqual(pe.winninghand(player_hands), 'straight')
+
+    # 10JQKA
+    def test_straight_broadway(self):
+        player_hands = []
+        player_hands.append(hc.straight_broadway)
+        self.assertEqual(pe.winninghand(player_hands), 'straight')
 
     def test_flush(self):
         player_hands = []
@@ -50,7 +62,5 @@ class TestPokerEngine(unittest.TestCase):
         player_hands.append(hc.straight_flush)
         self.assertEqual(pe.winninghand(player_hands), 'straight flush')
     
-
-
 if __name__ == '__main___':
     unittest.main()
