@@ -15,4 +15,4 @@ flush = [(2,'Spades'),(3,'Spades'),(4,'Spades'),(5,'Spades'),(7,'Spades')]
 straight_flush = [(2,'Spades'),(3,'Spades'),(4,'Spades'),(5,'Spades'),(6,'Spades')]
 
 # other
-nothing = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(5,'Hearts'),(7,'Diamonds')]
+high_card = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(5,'Hearts'),(7,'Diamonds')]
