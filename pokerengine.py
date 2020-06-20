@@ -1,4 +1,5 @@
 # TODO - write a test for wheel straight ex: A,2,3,4,5
+# TODO - fix edge case for wheel straight
 # TODO - refactor this code
 
 def _isStraight(rank_list):
