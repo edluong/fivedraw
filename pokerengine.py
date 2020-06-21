@@ -25,6 +25,18 @@ def _straight_and_or_flush(rank_list, suit_list):
         result = 'straight' if _isStraight(rank_list) else 'high card'
     return result
 
+def _same_rank_winning_hand(handone, handtwo):
+    _sorted_one = sorted(handone)
+    _sorted_two = sorted(handtwo)
+    _max_sorted_one = max(_sorted_one)
+    _max_sorted_two = max(_sorted_two)
+    
+    if _max_sorted_one > _max_sorted_two:
+        return handone
+    elif _max_sorted_two > _max_sorted_one:
+        return handtwo
+    else:
+        return _same_rank_winning_hand(_sorted_one.pop(_max_sorted_one), _sorted_two.pop(_max_sorted_two))
 
 def _hand_rank(hand):
     '''
@@ -91,6 +103,7 @@ def winninghand(players):
     '''
     _max_rank_strength = 0
     _max_hand = None
+    _max_desc = None
     
     for hand in players:
         hand_rank = _hand_rank(hand)
@@ -100,4 +113,7 @@ def winninghand(players):
         if rank_strength > _max_rank_strength:
             _max_rank_strength = rank_strength
             _max_hand = hand
-    return (hand, desc)
+            _max_desc = desc
+        elif rank_strength == _max_rank_strength:
+            _max_hand = _same_rank_winning_hand(_max_hand, hand)
+    return (_max_hand, _max_desc)

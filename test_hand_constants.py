@@ -16,3 +16,6 @@ straight_flush = [(2,'Spades'),(3,'Spades'),(4,'Spades'),(5,'Spades'),(6,'Spades
 
 # other
 high_card = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(5,'Hearts'),(7,'Diamonds')]
+high_card_ace = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(6,'Hearts'),(14,'Diamonds')]
+high_card_similar1 = [(8,'Spades'),(11,'Diamonds'),(12,'Clubs'),(13,'Hearts'),(14,'Diamonds')]
+high_card_similar2 = [(7,'Spades'),(11,'Diamonds'),(12,'Clubs'),(13,'Hearts'),(14,'Diamonds')]

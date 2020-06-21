@@ -76,17 +76,38 @@ class TestWinningHand(unittest.TestCase):
     
     def test_multiple_players(self):
         players = []
-        
         players.append(hc.pair)
         players.append(hc.two_pair)
         players.append(hc.trips)
         players.append(hc.full_house)
 
+        players_diff_order = []
+        players_diff_order.append(hc.full_house)
+        players_diff_order.append(hc.trips)
+        players_diff_order.append(hc.two_pair)
+        players_diff_order.append(hc.pair)
+
         _winning_desc = 'full house'
-        self.assertEqual(pe.winninghand(players),(hc.full_house, _winning_desc))
-    
+        result = (hc.full_house, _winning_desc)
+        self.assertEqual(pe.winninghand(players), result)
+        self.assertEqual(pe.winninghand(players_diff_order), result)
+
+
     def test_same_ranking_high_card(self):
-        pass
+        players = [] 
+        players.append(hc.high_card)
+        players.append(hc.high_card_ace)
+
+        # test different order
+        players_diff_order = []
+        players_diff_order.append(hc.high_card_ace)
+        players_diff_order.append(hc.high_card)
+
+        _winning_desc = 'high card'
+        result = (hc.high_card_ace, _winning_desc)
+
+        self.assertEqual(pe.winninghand(players), result)
+        self.assertEqual(pe.winninghand(players_diff_order), result)
 
     def test_tied_hand(self):
         pass
