@@ -9,6 +9,9 @@ def _isStraight(rank_list):
     if these are equal then it is consecutive
     inspiration: https://www.geeksforgeeks.org/python-check-if-list-contains-consecutive-numbers/
     '''
+    if len(rank_list) < 5:
+        raise Exception(f"hand length is now {len(rank_list)}!")
+
     smallest_rank = min(rank_list)
     largest_rank = max(rank_list)
     recreate_rank_list = list(range(smallest_rank, largest_rank + 1))
@@ -17,7 +20,7 @@ def _isStraight(rank_list):
 
 def _straight_and_or_flush(rank_list, suit_list):
     result = None
-
+    
     # checking if all the suit values are the same
     if len(set(suit_list)) == 1:
         result = 'straight flush' if _isStraight(rank_list) else 'flush'
@@ -26,17 +29,18 @@ def _straight_and_or_flush(rank_list, suit_list):
     return result
 
 def _same_rank_winning_hand(handone, handtwo):
-    _sorted_one = sorted(handone)
-    _sorted_two = sorted(handtwo)
-    _max_sorted_one = max(_sorted_one)
-    _max_sorted_two = max(_sorted_two)
-    
-    if _max_sorted_one > _max_sorted_two:
+    # TODO - rewrite a non-recursive way due to modifying the original hand
+    _handone_copy = handone
+    _handtwo_copy = handtwo
+
+    if max(handone) > max(handtwo):
         return handone
-    elif _max_sorted_two > _max_sorted_one:
+    elif max(handtwo) > max(handone):
         return handtwo
     else:
-        return _same_rank_winning_hand(_sorted_one.pop(_max_sorted_one), _sorted_two.pop(_max_sorted_two))
+        _handone_copy.remove(max(handone))
+        _handtwo_copy.remove(max(handtwo))
+        return _same_rank_winning_hand(_handone_copy, _handtwo_copy)
 
 def _hand_rank(hand):
     '''

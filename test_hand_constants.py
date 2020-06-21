@@ -14,6 +14,15 @@ straight_broadway = [(10,'Spades'),(11,'Diamonds'),(12,'Clubs'),(13,'Hearts'),(1
 flush = [(2,'Spades'),(3,'Spades'),(4,'Spades'),(5,'Spades'),(7,'Spades')]
 straight_flush = [(2,'Spades'),(3,'Spades'),(4,'Spades'),(5,'Spades'),(6,'Spades')]
 
+# NOTE: have to do this due to _same_rank_winning_hand() removing cards
+flush_same_rank_win_do = [(6,'Spades'),(11,'Spades'),(12,'Spades'),(13,'Spades'),(14,'Spades')]
+flush_same_rank_do = [(5,'Spades'),(11,'Spades'),(12,'Spades'),(13,'Spades'),(14,'Spades')]
+
+flush_same_rank_win = [(6,'Spades'),(11,'Spades'),(12,'Spades'),(13,'Spades'),(14,'Spades')]
+flush_same_rank = [(5,'Spades'),(11,'Spades'),(12,'Spades'),(13,'Spades'),(14,'Spades')]
+
+
+
 # other
 high_card = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(5,'Hearts'),(7,'Diamonds')]
 high_card_ace = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(6,'Hearts'),(14,'Diamonds')]
