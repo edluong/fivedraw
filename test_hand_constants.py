@@ -7,7 +7,7 @@ two_pair = [(2,'Spades'),(2,'Diamonds'),(3,'Clubs'),(3,'Hearts'),(4,'Diamonds')]
 trips = [(2,'Spades'),(2,'Diamonds'),(2,'Clubs'),(3,'Hearts'),(4,'Diamonds')]
 full_house = [(3,'Spades'),(3,'Hearts'),(3,'Clubs'),(2,'Spades'),(2,'Clubs')]
 quads = [(2,'Spades'),(2,'Diamonds'),(2,'Clubs'),(2,'Hearts'),(8,'Diamonds')]
-full_house_aces = [(14,'Spades'),(14,'Hearts'),(14,'Clubs'),(2,'Spades'),(2,'Clubs')]
+full_house_aces = [(14,'Spades'),(14,'Hearts'),(14,'Clubs'),(2,'Hearts'),(2,'Diamonds')]
 
 
 # straight/flush algorithm
