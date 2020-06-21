@@ -114,23 +114,18 @@ class TestWinningHand(unittest.TestCase):
         players.append(hc.flush_same_rank)
         players.append(hc.flush_same_rank_win)
 
+        players_diff_order = []
+        players_diff_order.append(hc.flush_same_rank_win)
+        players_diff_order.append(hc.flush_same_rank)
+        
         _winning_desc = 'flush'
         result = (hc.flush_same_rank_win, _winning_desc)
         self.assertEqual(pe.winninghand(players), result)
+        self.assertEqual(pe.winninghand(players_diff_order), result)
     
-    # NOTE: have to copy the same hand in the test due to
-    # _same_rank_winning_hand() removing cards
-    # TODO - this may need to be fixed
-    def test_same_ranking_flush_diff_order(self):
-        players = []
-        players.append(hc.flush_same_rank_win_do)
-        players.append(hc.flush_same_rank_do)
-
-        _winning_desc = 'flush'
-        result = (hc.flush_same_rank_win_do, _winning_desc)
-        self.assertEqual(pe.winninghand(players), result)
-
-
+    def test_same_ranking_fullhouse(self):
+        pass
+    
     def test_tied_hand(self):
         pass
 

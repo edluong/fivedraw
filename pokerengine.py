@@ -1,5 +1,3 @@
-# TODO - fix winninghand() to resolve ties ex: high card vs high card
-
 import constants as con
 
 def _isStraight(rank_list):
@@ -29,19 +27,15 @@ def _straight_and_or_flush(rank_list, suit_list):
     return result
 
 def _same_rank_winning_hand(handone, handtwo):
-    # TODO - rewrite a non-recursive way due to modifying the original hand
-    _handone_copy = handone
-    _handtwo_copy = handtwo
-
-    if max(handone) > max(handtwo):
+    diff_one = set(handone).difference(set(handtwo))
+    diff_two = set(handtwo).difference(set(handone))
+    
+    if sorted(handone) == sorted(handtwo):
+        return handone # arbitrarily grab the first one because its the same
+    elif max(diff_one) > max(diff_two):
         return handone
-    elif max(handtwo) > max(handone):
-        return handtwo
     else:
-        # TODO - fix this to not be recursive, as it destroys the hand
-        _handone_copy.remove(max(handone))
-        _handtwo_copy.remove(max(handtwo))
-        return _same_rank_winning_hand(_handone_copy, _handtwo_copy)
+        return handtwo
 
 def _hand_rank(hand):
     '''
