@@ -127,7 +127,7 @@ class TestWinningHand(unittest.TestCase):
         players.append(hc.flush_same_rank_do)
 
         _winning_desc = 'flush'
-        result = (hc.flush_same_rank_win, _winning_desc)
+        result = (hc.flush_same_rank_win_do, _winning_desc)
         self.assertEqual(pe.winninghand(players), result)
 
 
