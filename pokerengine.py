@@ -20,7 +20,7 @@ def _isStraight(rank_list):
 
 def _straight_and_or_flush(rank_list, suit_list):
     result = None
-    
+
     # checking if all the suit values are the same
     if len(set(suit_list)) == 1:
         result = 'straight flush' if _isStraight(rank_list) else 'flush'
@@ -38,6 +38,7 @@ def _same_rank_winning_hand(handone, handtwo):
     elif max(handtwo) > max(handone):
         return handtwo
     else:
+        # TODO - fix this to not be recursive, as it destroys the hand
         _handone_copy.remove(max(handone))
         _handtwo_copy.remove(max(handtwo))
         return _same_rank_winning_hand(_handone_copy, _handtwo_copy)
