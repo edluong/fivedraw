@@ -114,10 +114,16 @@ def winninghand(players):
     _max_desc = None
     
     for hand in players:
+
+        # get a ranking for the hand
         hand_rank = _hand_rank(hand)
         
+        # separate out the results
         desc, rank_strength = hand_rank
         
+        # determine if this ranking is higher than what we've seen so far
+        # if its higher replace it as the highest ranking
+        # if its the same ranking, compare the actual cards
         if rank_strength > _max_rank_strength:
             _max_rank_strength = rank_strength
             _max_hand = hand
