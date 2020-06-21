@@ -1,3 +1,6 @@
+# TODO - need to return tied ranking and tied hands e.g. pair of 2s and pair of 2s, etc.
+# TODO - winninghand needs to check for unique cards, raise error if cards are not unique
+
 import constants as con
 
 def _isStraight(rank_list):
@@ -29,9 +32,15 @@ def _straight_and_or_flush(rank_list, suit_list):
 def _same_rank_winning_hand(handone, handtwo):
     diff_one = set(handone).difference(set(handtwo))
     diff_two = set(handtwo).difference(set(handone))
-    
+
+    # TODO - need to return both hands if they are tied by rank
+    # e.g. pair of 2s vs pair of 2s
+    # high card AKQJ9 AKQJ9
+    # two pair AAKKQ vs AAKKQ
+    # straight
+
     if sorted(handone) == sorted(handtwo):
-        return handone # arbitrarily grab the first one because its the same
+        return [handone, handtwo] # return both hands
     elif max(diff_one) > max(diff_two):
         return handone
     else:
@@ -96,7 +105,7 @@ def winninghand(players):
     argument1 (array): this will be an array of hand objects
 
     Returns:
-    tuple: (winning hand, hand rank desc)
+    tuple: (winning hand(s), hand rank desc)
 
     ([(10,'D'),(J,'D')(Q,'D')(K,'D')(A,'D')], 'straight flush')
     '''

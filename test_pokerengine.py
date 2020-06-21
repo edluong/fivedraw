@@ -124,10 +124,30 @@ class TestWinningHand(unittest.TestCase):
         self.assertEqual(pe.winninghand(players_diff_order), result)
     
     def test_same_ranking_fullhouse(self):
-        pass
+        players = []
+        players.append(hc.full_house)
+        players.append(hc.full_house_aces)
+
+        players_diff_order = []
+        players_diff_order.append(hc.full_house_aces)
+        players_diff_order.append(hc.full_house)
+
+        _winning_desc = 'full house'
+        result = (hc.full_house_aces, _winning_desc)
+        self.assertEqual(pe.winninghand(players), result)
+        self.assertEqual(pe.winninghand(players_diff_order), result)
     
     def test_tied_hand(self):
         pass
+        # players = []
+        # players.append(hc.pair)
+        # players.append(hc.pair_tied)
+
+        # _winning_desc = 'pair'
+        # result = ([hc.pair_tied, hc.pair], _winning_desc)
+        # self.assertEqual(pe.winninghand(players), result)
+
+
 
 if __name__ == '__main___':
     unittest.main()
