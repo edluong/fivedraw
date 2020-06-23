@@ -1,5 +1,6 @@
 # TODO - winninghand needs to check for unique cards, raise error if cards are not unique
 # TODO - winninghand needs to account for four tied hands
+# TODO - make hand_rank a non- private function
 
 import constants as con
 
