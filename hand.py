@@ -11,7 +11,7 @@ class Hand:
         return len(self.hand)
     
     def print_hand(self):
-        for card in self.hand:
+        for card in sorted(self.hand):
             rank, suit = card
             
             rank_name = con.RANK_NAME.get(rank) or rank
@@ -23,3 +23,6 @@ class Hand:
     
     def get_hand(self):
         return self.hand
+    
+    def discard(self, card):
+        pass
