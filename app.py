@@ -40,15 +40,7 @@ def main():
 
     # TODO - need defensive checking around input
     # TODO - need to write logic if dont want to discard
-    # TODO - hand is not sorted (see example below)
-    # example: 
-    # Your Hand:
-    # 1: (2, 'Hearts')
-    # 2: (10, 'Clubs')
-    # 3: (8, 'Clubs')
-    # 4: (4, 'Clubs')
-    # 5: (2, 'Clubs')
-    # You have: pair
+    # TODO - resort hand after redraw
     discard_choices = input('Which cards to discard? (Type the number, e.g.: 1 2 3): ')
     _indexes = [int(_index) for _index in discard_choices.split(' ')]
 
