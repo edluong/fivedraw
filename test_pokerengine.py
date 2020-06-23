@@ -147,17 +147,35 @@ class TestWinningHand(unittest.TestCase):
         result = ([hc.tied_hand_pair, hc.tied_hand_pair_two], _winning_desc)
         self.assertEqual(pe.winninghand(players), result)
     
-    # example: 22XXX vs 22XXX
-    def test_tied_pair(self):
+    # example: AKQJ9 AKQJ9
+    def test_tied_high_card(self):
         players = []
-        players.append(hc.tied_hand_pair)
-        players.append(hc.tied_hand_pair_two)
+        players.append(hc.tied_hand_high_card)
+        players.append(hc.tied_hand_high_card_two)
 
-        _winning_desc = 'pair'
-        result = ([hc.tied_hand_pair, hc.tied_hand_pair_two], _winning_desc)
+        _winning_desc = 'high card'
+        result = ([hc.tied_hand_high_card, hc.tied_hand_high_card_two], _winning_desc)
+        self.assertEqual(pe.winninghand(players), result)
+    
+    # example: AAKKQ vs AAKKQ
+    def test_tied_two_pair(self):
+        players = []
+        players.append(hc.tied_hand_two_pair)
+        players.append(hc.tied_hand_two_pair_two)
+
+        _winning_desc = 'two pair'
+        result = ([hc.tied_hand_two_pair, hc.tied_hand_two_pair_two], _winning_desc)
         self.assertEqual(pe.winninghand(players), result)
 
+    # example: AKQJ10 vs AKQJ10
+    def test_tied_straight(self):
+        players = []
+        players.append(hc.tied_hand_straight)
+        players.append(hc.tied_hand_straight_two)
 
+        _winning_desc = 'straight'
+        result = ([hc.tied_hand_straight, hc.tied_hand_straight_two], _winning_desc)
+        self.assertEqual(pe.winninghand(players), result)
 
 if __name__ == '__main___':
     unittest.main()

@@ -21,11 +21,22 @@ flush_same_rank_win = [(6,'Spades'),(11,'Spades'),(12,'Spades'),(13,'Spades'),(1
 flush_same_rank = [(5,'Spades'),(11,'Spades'),(12,'Spades'),(13,'Spades'),(14,'Spades')]
 
 
-
-# other
+# high card
 high_card = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(5,'Hearts'),(7,'Diamonds')]
 high_card_ace = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(6,'Hearts'),(14,'Diamonds')]
 
-# test_tied_hand
+# test_tied_pair
 tied_hand_pair = [(2,'Spades'),(2,'Diamonds'),(4,'Clubs'),(5,'Hearts'),(7,'Diamonds')]
 tied_hand_pair_two = [(2,'Clubs'),(2,'Hearts'),(4,'Spades'),(5,'Clubs'),(7,'Hearts')]  
+
+# test_tied_high_card
+tied_hand_high_card = [(14,'Spades'),(13,'Spades'),(12,'Spades'),(11,'Spades'),(9,'Diamonds')]
+tied_hand_high_card_two = [(14,'Diamonds'),(13,'Diamonds'),(12,'Diamonds'),(11,'Diamonds'),(9,'Spades')]
+
+# test_tied_two_pair
+tied_hand_two_pair = [(14,'Spades'),(14,'Diamonds'),(13,'Diamonds'),(13,'Hearts'),(12,'Diamonds')]
+tied_hand_two_pair_two = [(14,'Clubs'),(14,'Hearts'),(13,'Spades'),(13,'Clubs'),(12,'Hearts')]  
+
+# test_tied_straight
+tied_hand_straight = [(14,'Spades'),(13,'Diamonds'),(12,'Diamonds'),(11,'Hearts'),(10,'Diamonds')]
+tied_hand_straight_two = [(14,'Clubs'),(13,'Hearts'),(12,'Spades'),(11,'Clubs'),(10,'Hearts')]  

@@ -1,5 +1,5 @@
-# TODO - need to return tied ranking and tied hands e.g. pair of 2s and pair of 2s, etc.
 # TODO - winninghand needs to check for unique cards, raise error if cards are not unique
+# TODO - winninghand needs to account for four tied hands
 
 import constants as con
 
@@ -37,13 +37,6 @@ def _same_rank_winning_hand(handone, handtwo):
 
     ranks_handone = [rank for rank, suit in handone]
     ranks_handtwo = [rank for rank, suit in handtwo]
-
-    
-    # TODO - need to return both hands if they are tied by rank
-    # e.g. pair of 2s vs pair of 2s
-    # high card AKQJ9 AKQJ9
-    # two pair AAKKQ vs AAKKQ
-    # straight
 
     if sorted(ranks_handone) == sorted(ranks_handtwo):
         return [handone, handtwo] # return both hands
