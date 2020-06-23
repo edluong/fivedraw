@@ -25,5 +25,7 @@ flush_same_rank = [(5,'Spades'),(11,'Spades'),(12,'Spades'),(13,'Spades'),(14,'S
 # other
 high_card = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(5,'Hearts'),(7,'Diamonds')]
 high_card_ace = [(2,'Spades'),(3,'Diamonds'),(4,'Clubs'),(6,'Hearts'),(14,'Diamonds')]
-high_card_similar1 = [(8,'Spades'),(11,'Diamonds'),(12,'Clubs'),(13,'Hearts'),(14,'Diamonds')]
-high_card_similar2 = [(7,'Spades'),(11,'Diamonds'),(12,'Clubs'),(13,'Hearts'),(14,'Diamonds')]
+
+# test_tied_hand
+tied_hand_pair = [(2,'Spades'),(2,'Diamonds'),(4,'Clubs'),(5,'Hearts'),(7,'Diamonds')]
+tied_hand_pair_two = [(2,'Clubs'),(2,'Hearts'),(4,'Spades'),(5,'Clubs'),(7,'Hearts')]  

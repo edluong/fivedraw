@@ -137,15 +137,25 @@ class TestWinningHand(unittest.TestCase):
         self.assertEqual(pe.winninghand(players), result)
         self.assertEqual(pe.winninghand(players_diff_order), result)
     
-    def test_tied_hand(self):
-        pass
-        # players = []
-        # players.append(hc.pair)
-        # players.append(hc.pair_tied)
+    # example: 22XXX vs 22XXX
+    def test_tied_pair(self):
+        players = []
+        players.append(hc.tied_hand_pair)
+        players.append(hc.tied_hand_pair_two)
 
-        # _winning_desc = 'pair'
-        # result = ([hc.pair_tied, hc.pair], _winning_desc)
-        # self.assertEqual(pe.winninghand(players), result)
+        _winning_desc = 'pair'
+        result = ([hc.tied_hand_pair, hc.tied_hand_pair_two], _winning_desc)
+        self.assertEqual(pe.winninghand(players), result)
+    
+    # example: 22XXX vs 22XXX
+    def test_tied_pair(self):
+        players = []
+        players.append(hc.tied_hand_pair)
+        players.append(hc.tied_hand_pair_two)
+
+        _winning_desc = 'pair'
+        result = ([hc.tied_hand_pair, hc.tied_hand_pair_two], _winning_desc)
+        self.assertEqual(pe.winninghand(players), result)
 
 
 

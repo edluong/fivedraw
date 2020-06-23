@@ -30,16 +30,22 @@ def _straight_and_or_flush(rank_list, suit_list):
     return result
 
 def _same_rank_winning_hand(handone, handtwo):
+
+    # find the different cards from the both hands
     diff_one = set(handone).difference(set(handtwo))
     diff_two = set(handtwo).difference(set(handone))
 
+    ranks_handone = [rank for rank, suit in handone]
+    ranks_handtwo = [rank for rank, suit in handtwo]
+
+    
     # TODO - need to return both hands if they are tied by rank
     # e.g. pair of 2s vs pair of 2s
     # high card AKQJ9 AKQJ9
     # two pair AAKKQ vs AAKKQ
     # straight
 
-    if sorted(handone) == sorted(handtwo):
+    if sorted(ranks_handone) == sorted(ranks_handtwo):
         return [handone, handtwo] # return both hands
     elif max(diff_one) > max(diff_two):
         return handone
