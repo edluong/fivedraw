@@ -1,3 +1,4 @@
+# TODO - re-write this as json
 # used for testing
 
 # "pair" hands

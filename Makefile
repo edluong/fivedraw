@@ -1,4 +1,6 @@
-.PHONY: run test test-deck test-hand test-game test-eng
+TODO := "TODO"
+
+.PHONY: run test test-deck test-hand test-game test-eng todo
 
 run:
 	@python3 app.py
@@ -15,3 +17,6 @@ test-game:
 
 test-eng:
 	@python3 -m unittest test_pokerengine
+
+todo: # in code todo list!
+	grep -inrb TODO *.py
