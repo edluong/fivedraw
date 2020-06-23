@@ -18,8 +18,6 @@ class Hand:
             card_output = (rank_name, suit)
             print(card_output)
 
-
-    
     def reset_hand(self):
         self.hand.clear()
     
