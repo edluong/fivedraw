@@ -11,12 +11,19 @@ class Hand:
         return len(self.hand)
     
     def print_hand(self):
-        for card in sorted(self.hand):
-            rank, suit = card
+        '''
+            prints hand from smallest to largest rank
+            also with the index of the card
+        '''
+        if self.hand_size() < 1:
+            print('No Cards')
+        for card in sorted(enumerate(self.hand, 1)):
+            _index, _card_tuple = card
+            rank, suit = _card_tuple
             
             rank_name = con.RANK_NAME.get(rank) or rank
             card_output = (rank_name, suit)
-            print(card_output)
+            print(f'{_index}: {card_output}')
 
     def reset_hand(self):
         self.hand.clear()
@@ -24,5 +31,20 @@ class Hand:
     def get_hand(self):
         return self.hand
     
-    def discard(self, card):
-        pass
+    # TODO - need unit test
+    def discard(self, indexes):
+        '''
+            given a list of indexes, removes the index of the card selected
+        '''
+        if len(indexes) == 5:
+            self.reset_hand()
+        
+        _list_to_remove = []
+        for index in indexes:
+            for card in enumerate(self.get_hand(), 1):
+                _index, _card_tuple = card
+                if _index == index:
+                    _list_to_remove.append(_card_tuple)
+        for _card in _list_to_remove:
+            self.hand.remove(_card)
+                
