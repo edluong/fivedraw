@@ -1,3 +1,5 @@
+# TODO - convert constants.py to a json
+
 # special case for wheel, 'A2345'
 STRAIGHT_WHEEL = [2, 3, 4, 5, 14]
 

@@ -17,7 +17,6 @@ def draw_hand(hand):
 
 def main():
     
-    
     draw_hand(player_hand)
     draw_hand(cpu_hand)
     
@@ -58,4 +57,4 @@ if __name__ == "__main__":
         elif answer.lower() == 'q':
             break
         else:
-            print('{} is not a valid command! Type "d" to draw; "q" to quit'.format(answer))
+            print(f'{answer} is not a valid command! Type "d" to draw; "q" to quit')
