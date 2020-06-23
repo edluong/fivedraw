@@ -1,12 +1,13 @@
 from card import Card
 from random import shuffle
+import constants as con
 
 class Deck:
 
-    suit = ['heart','club','spade','diamond']
+    suit = con.SUIT
 
     def load_deck(self):
-        return [Card(rank,suit) for rank in range(1,14) for suit in self.suit]
+        return [(rank,suit) for rank in range(2,15) for suit in self.suit]
     
     def __init__(self):
         self.deck = self.load_deck()

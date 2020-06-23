@@ -12,3 +12,12 @@ RANKING = {
     'quads': 8,
     'straight flush': 9
 }
+
+SUIT = ['Hearts','Clubs','Spades','Diamonds']
+
+RANK_NAME = {
+    14: 'Ace',
+    11: 'Jack',
+    12: 'Queen',
+    13: 'King'
+}

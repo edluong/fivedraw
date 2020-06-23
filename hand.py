@@ -1,3 +1,5 @@
+import constants as con 
+
 class Hand:
     def __init__(self):
         self.hand = []
@@ -10,7 +12,13 @@ class Hand:
     
     def print_hand(self):
         for card in self.hand:
-            print(card)
+            rank, suit = card
+            
+            rank_name = con.RANK_NAME.get(rank) or rank
+            card_output = (rank_name, suit)
+            print(card_output)
+
+
     
     def reset_hand(self):
         self.hand.clear()
