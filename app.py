@@ -28,7 +28,7 @@ def main():
     print('\n')
     print('Your Hand:',end='\n')
     player_hand.print_hand()
-    player_rank = pe._hand_rank(player_hand.get_hand())
+    player_rank = pe.hand_rank(player_hand.get_hand())
 
     player_result, _ = player_rank
     print(f'You have: {player_result}')
@@ -37,7 +37,7 @@ def main():
 
     print("CPU's Hand: ",end='\n')
     cpu_hand.print_hand()
-    cpu_rank = pe._hand_rank(cpu_hand.get_hand())
+    cpu_rank = pe.hand_rank(cpu_hand.get_hand())
 
     cpu_result, _ = cpu_rank
     print(f'CPU has: {cpu_result}')   
@@ -76,7 +76,7 @@ def main():
     print('\n')
     print('Your Hand:',end='\n')
     player_hand.print_hand()
-    player_rank = pe._hand_rank(player_hand.get_hand())
+    player_rank = pe.hand_rank(player_hand.get_hand())
 
     player_result, _ = player_rank
     print(f'You have: {player_result}')
