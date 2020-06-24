@@ -7,7 +7,7 @@ class TestHand(unittest.TestCase):
     def setUp(self):
 
         self.hand = Hand()
-        self.card = Card(1,'spade')
+        self.card = (14,'Spades')
         self.hand.add_card(self.card)
    
     def test_add_card(self):
@@ -19,3 +19,10 @@ class TestHand(unittest.TestCase):
     def test_reset_hand(self):
         self.hand.reset_hand()
         self.assertEqual([],self.hand.get_hand())
+
+    def test_discard_hand(self):
+        self.hand.discard([1]) # enumerate starts at 1 not traditional 0
+        self.assertEqual([],self.hand.get_hand())
+        
+        
+    

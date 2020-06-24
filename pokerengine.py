@@ -1,4 +1,3 @@
-# TODO - winninghand needs to check for unique cards, raise error if cards are not unique
 # TODO - winninghand needs to account for four tied hands
 
 import constants as con
@@ -45,7 +44,7 @@ def _same_rank_winning_hand(handone, handtwo):
     else:
         return handtwo
 
-def _hand_rank(hand):
+def hand_rank(hand):
     '''
     evaluates a hand of five cards
 
@@ -115,10 +114,10 @@ def winninghand(players):
     for hand in players:
 
         # get a ranking for the hand
-        hand_rank = _hand_rank(hand)
+        handrank_tuple = hand_rank(hand)
         
         # separate out the results
-        desc, rank_strength = hand_rank
+        desc, rank_strength = handrank_tuple
         
         # determine if this ranking is higher than what we've seen so far
         # if its higher replace it as the highest ranking
