@@ -2,6 +2,9 @@ from deck import Deck
 from hand import Hand
 import pokerengine as pe
 
+class CardNumberDoesNotExistError(Exception):
+    '''Card Number is Not Between 1 to 5! '''
+
 # set up
 player_hand = Hand()
 cpu_hand = Hand()
@@ -38,13 +41,30 @@ def main():
 
     print('\n')
 
-    # TODO - need defensive checking around input
     # TODO - need to write logic if dont want to discard
     # TODO - resort hand after redraw
-    discard_choices = input('Which cards to discard? (Type the number, e.g.: 1 2 3): ')
-    _indexes = [int(_index) for _index in discard_choices.split(' ')]
+    _indexes = []
 
-    player_hand.discard(_indexes)
+    while True:
+
+        try:
+            discard_choices = input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
+
+            for _index in discard_choices.split(' '):
+                if _index.lower() == 'k':
+                    break
+                elif int(_index) < 0 or int(_index) > 5 :
+                    raise CardNumberDoesNotExistError
+                else:
+                    _indexes.append(int(_index))
+            break
+        except ValueError:
+            print('Integer was not entered in!')
+        except CardNumberDoesNotExistError:
+            print("Card Number doesn't exist! Values must be between 1 through 5!")
+    
+    if _indexes:    
+        player_hand.discard(_indexes)
 
     # re-draw hand
     draw_hand(player_hand, len(_indexes))
