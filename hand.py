@@ -17,7 +17,7 @@ class Hand:
         '''
         if self.hand_size() < 1:
             print('No Cards')
-        for card in sorted(enumerate(self.hand, 1)):
+        for card in enumerate(sorted(self.hand), 1):
             _index, _card_tuple = card
             rank, suit = _card_tuple
             
@@ -41,7 +41,7 @@ class Hand:
         
         _list_to_remove = []
         for index in indexes:
-            for card in enumerate(self.get_hand(), 1):
+            for card in enumerate(sorted(self.get_hand()), 1):
                 _index, _card_tuple = card
                 if _index == index:
                     _list_to_remove.append(_card_tuple)

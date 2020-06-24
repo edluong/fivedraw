@@ -1,3 +1,5 @@
+import sys
+
 from deck import Deck
 from hand import Hand
 import pokerengine as pe
@@ -22,6 +24,7 @@ def main():
     draw_hand(player_hand)
     draw_hand(cpu_hand)
     
+    # TODO - need to make this into a display function
     print('\n')
     print('Your Hand:',end='\n')
     player_hand.print_hand()
@@ -41,14 +44,15 @@ def main():
 
     print('\n')
 
-    # TODO - need to write logic if dont want to discard
-    # TODO - resort hand after redraw
     _indexes = []
 
     while True:
 
         try:
             discard_choices = input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
+
+            if 'quit' in discard_choices:
+                sys.exit(0)
 
             for _index in discard_choices.split(' '):
                 if _index.lower() == 'k':
