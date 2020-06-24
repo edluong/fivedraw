@@ -19,33 +19,34 @@ def draw_hand(hand, numCards = 5):
     for _ in range(numCards):
         hand.add_card(d.draw())
 
+def _display(hand, playertype='p'):
+    PLAYER_HAND = 'Your Hand:'
+    CPU_HAND = 'CPU Hand:'
+    PLAYER_RESULT = 'You have:'
+    CPU_RESULT = 'CPU has:'
+    
+    print('\n')
+    _hand_msg = CPU_HAND if playertype == 'c' else PLAYER_HAND
+    print(_hand_msg,end='\n')
+    hand.print_hand()
+    _rank = pe.hand_rank(hand.get_hand())
+    
+    # get the ranking of the hand
+    _result, _ = _rank
+    _result_msg = CPU_RESULT if playertype == 'c' else PLAYER_RESULT
+    print(f'{_result_msg} {_result}')
+
 def main():
 
+    # pass out the cards
     draw_hand(player_hand)
     draw_hand(cpu_hand)
     
-    # TODO - need to make this into a display function
-    print('\n')
-    print('Your Hand:',end='\n')
-    player_hand.print_hand()
-    player_rank = pe.hand_rank(player_hand.get_hand())
+    # display the cards
+    _display(player_hand)
+    _display(cpu_hand, 'c')
 
-    player_result, _ = player_rank
-    print(f'You have: {player_result}')
-   
-    print('\n')
-
-    print("CPU's Hand: ",end='\n')
-    cpu_hand.print_hand()
-    cpu_rank = pe.hand_rank(cpu_hand.get_hand())
-
-    cpu_result, _ = cpu_rank
-    print(f'CPU has: {cpu_result}')   
-
-    print('\n')
-
-    _indexes = []
-
+    _indexes = [] # input for cards to discard
     while True:
 
         try:
@@ -73,13 +74,7 @@ def main():
     # re-draw hand
     draw_hand(player_hand, len(_indexes))
 
-    print('\n')
-    print('Your Hand:',end='\n')
-    player_hand.print_hand()
-    player_rank = pe.hand_rank(player_hand.get_hand())
-
-    player_result, _ = player_rank
-    print(f'You have: {player_result}')
+    _display(player_hand) # display the card to the player
 
 
 if __name__ == "__main__":
