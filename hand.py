@@ -31,7 +31,6 @@ class Hand:
     def get_hand(self):
         return self.hand
     
-    # TODO - need unit test
     def discard(self, indexes):
         '''
             given a list of indexes, removes the index of the card selected
