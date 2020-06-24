@@ -1,15 +1,17 @@
 import sys
 
 from deck import Deck
-from hand import Hand
+from player import Player
 import pokerengine as pe
 
 class CardNumberDoesNotExistError(Exception):
     '''Card Number is Not Between 1 to 5! '''
 
 # set up
-player_hand = Hand()
-cpu_hand = Hand()
+STARTING_STACK = 200 # 1/2 blinds
+
+player = Player(STARTING_STACK)
+cpu = Player(STARTING_STACK)
 
 # prepare the deck
 d = Deck()
@@ -39,12 +41,12 @@ def _display(hand, playertype='p'):
 def main():
 
     # pass out the cards
-    draw_hand(player_hand)
-    draw_hand(cpu_hand)
+    draw_hand(player.get_hand())
+    draw_hand(cpu.get_hand())
     
     # display the cards
-    _display(player_hand)
-    _display(cpu_hand, 'c')
+    _display(player.get_hand())
+    _display(cpu.get_hand(), 'c')
 
     _indexes = [] # input for cards to discard
     while True:
@@ -69,12 +71,12 @@ def main():
             print("Card Number doesn't exist! Values must be between 1 through 5!")
     
     if _indexes:    
-        player_hand.discard(_indexes)
+        player.get_hand().discard(_indexes)
 
     # re-draw hand
-    draw_hand(player_hand, len(_indexes))
+    draw_hand(player.get_hand(), len(_indexes))
 
-    _display(player_hand) # display the card to the player
+    _display(player.get_hand()) # display the card to the player
 
 
 if __name__ == "__main__":
@@ -86,8 +88,8 @@ if __name__ == "__main__":
         if answer.lower() == 'd':
             # reset everything
             d.reload()
-            player_hand.reset_hand()
-            cpu_hand.reset_hand()
+            player.get_hand().reset_hand()
+            cpu.get_hand().reset_hand()
             
             # load up the hands again 
             main()
