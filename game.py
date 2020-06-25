@@ -115,7 +115,7 @@ class Game:
         except:
             raise Exception('There seems to be a problem...')
             
-    def payout(self,players):
+    def payout(self, players):
         '''
             finds the winner
             pay the winner with the pot
