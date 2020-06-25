@@ -2,7 +2,7 @@ import unittest
 
 import constants as con
 import pokerengine as pe
-import test_hand_constants as hc
+import tests.test_hand_constants as hc # added tests. since Makefile is above
 
 class TestHandRankings(unittest.TestCase):
     
