@@ -1,5 +1,6 @@
 import sys
 
+from cpu import CPU
 from deck import Deck
 from player import Player
 from pokerengine import hand_rank, winninghand
@@ -61,7 +62,7 @@ class Game:
 
         # initialize players
         self.player = Player(self.starting_stack)
-        self.cpu = Player(self.starting_stack)
+        self.cpu = CPU(self.starting_stack)
 
         # prepare the deck
         self.deck = Deck()
@@ -99,6 +100,39 @@ class Game:
         # re-draw hand
         self._draw_hand(self.player.get_hand(), self.deck, len(_indexes))
         self._display(self.player) # display the card to the player
+    
+    def betting_round(self, player):
+        try:
+            action = input('Bet(b) Check(c) Fold(f): ').lower()
+            if action == 'f':
+                self.payout([self.player, self.cpu])
+            elif action == 'c':
+                self.cpu.cpu_decision()
+            elif action == 'b':
+                bet_amount = input('bet amount: ')
+                self.game.add_pot_size(self.player.bet(bet_amount))
+                print(f'You bet: {bet_amount}')
+        except:
+            raise Exception('There seems to be a problem...')
+            
+    def payout(self,players):
+        '''
+            finds the winner
+            pay the winner with the pot
+            set the pot to 0
+            
+            Parameters: List[Players]
+            
+            Returns: void
+        '''
+        payout_amount = self.pot_size / len(players)
+        
+        # pay all the winners
+        for player in players:
+            player.winpot(payout_amount)
+        
+        # reset the pot size
+        self.pot_size = 0
 
 
     def update_turn_state(self,state):
