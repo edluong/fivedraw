@@ -14,7 +14,7 @@ class Player:
     def bet(self, amount):
         if amount > self.stack:
             raise CantOverBetError
-        self.stack-=amount
+        self.stack-= amount
         return amount
     
     def dealer_status(self):
@@ -25,3 +25,6 @@ class Player:
     
     def get_hand(self):
         return self.hand
+    
+    def winpot(self, amount):
+        self.stack += amount
