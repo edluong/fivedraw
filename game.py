@@ -105,7 +105,7 @@ class Game:
         try:
             action = input('Bet(b) Check(c) Fold(f): ').lower()
             if action == 'f':
-                self.payout([self.player, self.cpu])
+                self.payout([self.cpu])
             elif action == 'c':
                 self.cpu.cpu_decision()
             elif action == 'b':
@@ -126,6 +126,7 @@ class Game:
             Returns: void
         '''
         payout_amount = self.pot_size / len(players)
+        
         
         # pay all the winners
         for player in players:
