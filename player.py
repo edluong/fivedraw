@@ -10,7 +10,6 @@ class Player:
         self.stack = stack
         self.isDealer = isDealer
     
-    # TODO - set up a unit test
     def bet(self, amount):
         if amount > self.stack:
             raise CantOverBetError

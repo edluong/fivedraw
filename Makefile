@@ -1,4 +1,4 @@
-.PHONY: run test test-deck test-hand test-game test-eng
+.PHONY: run test test-deck test-hand test-game test-eng test-player
 
 run:
 	@python3 app.py
@@ -20,3 +20,6 @@ test-game:
 
 test-eng:
 	@python3 -m unittest tests.test_pokerengine
+
+test-player:
+	@python3 -m unittest tests.test_player
