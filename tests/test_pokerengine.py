@@ -71,46 +71,43 @@ class TestWinningHand(unittest.TestCase):
         self.players = []
         self.players_diff_order = []
 
-        self.p1 = Player(_stack_size)
-        self.p2 = Player(_stack_size)
-        self.p3 = Player(_stack_size)
-        self.p4 = Player(_stack_size)
+        # initialize the players
+        self.p_pair = Player(_stack_size)
+        self.p_two_pair = Player(_stack_size)
+        self.p_trips = Player(_stack_size)
+        self.p_full_house = Player(_stack_size)
+
+        # set hands to players
+        self.p_pair.set_hand(hc.pair)
+        self.p_two_pair.set_hand(hc.two_pair)
+        self.p_trips.set_hand(hc.trips)
+        self.p_full_house.set_hand(hc.full_house)
 
         
     def test_pair_vs_trips(self):
-        # assign hands to players
-        self.p1.set_hand(hc.pair)
-        self.p2.set_hand(hc.trips)
-
         # add to players array
-        self.players.append(self.p1)
-        self.players.append(self.p2)
+        self.players.append(self.p_pair)
+        self.players.append(self.p_trips)
 
         # winning description and results of winninghand
         _winning_desc = 'trips'
         r_player, r_winning_desc = pe.winninghand(self.players)
 
-        self.assertEqual(r_player, self.p2)
+        self.assertEqual(r_player, self.p_trips)
         self.assertEqual(r_winning_desc, _winning_desc)
     
     def test_multiple_players(self):
-        # assign hands to players
-        self.p1.set_hand(hc.pair)
-        self.p2.set_hand(hc.two_pair)
-        self.p3.set_hand(hc.trips)
-        self.p4.set_hand(hc.full_house)
-
         # add players to players array
-        self.players.append(self.p1)
-        self.players.append(self.p2)
-        self.players.append(self.p3)
-        self.players.append(self.p4)
+        self.players.append(self.p_pair)
+        self.players.append(self.p_two_pair)
+        self.players.append(self.p_trips)
+        self.players.append(self.p_full_house)
 
         # add players to players_diff_order array
-        self.players_diff_order.append(self.p4)
-        self.players_diff_order.append(self.p3)
-        self.players_diff_order.append(self.p2)
-        self.players_diff_order.append(self.p1)
+        self.players_diff_order.append(self.p_full_house)
+        self.players_diff_order.append(self.p_trips)
+        self.players_diff_order.append(self.p_two_pair)
+        self.players_diff_order.append(self.p_pair)
 
         # winning description and results of winninghand
         _winning_desc = 'full house'
@@ -118,9 +115,9 @@ class TestWinningHand(unittest.TestCase):
         r_do_player, r_do_winning_desc = pe.winninghand(self.players_diff_order)
 
         # tests
-        self.assertEqual(r_player, self.p4)
+        self.assertEqual(r_player, self.p_full_house)
         self.assertEqual(r_winning_desc, _winning_desc)
-        self.assertEqual(r_do_player, self.p4)
+        self.assertEqual(r_do_player, self.p_full_house)
         self.assertEqual(r_do_winning_desc, _winning_desc)
 
 
