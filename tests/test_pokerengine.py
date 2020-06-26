@@ -1,6 +1,7 @@
 import unittest
 
 import constants as con
+from player import Player
 import pokerengine as pe
 import tests.test_hand_constants as hc # added tests. since Makefile is above
 
@@ -65,32 +66,62 @@ class TestHandRankings(unittest.TestCase):
 
 class TestWinningHand(unittest.TestCase):
 
-    def test_pair_vs_trips(self):
-        players = []
-        
-        players.append(hc.pair)
-        players.append(hc.trips)
+    def setUp(self):
+        _stack_size = 100
+        self.players = []
+        self.players_diff_order = []
 
+        self.p1 = Player(_stack_size)
+        self.p2 = Player(_stack_size)
+        self.p3 = Player(_stack_size)
+        self.p4 = Player(_stack_size)
+
+        
+    def test_pair_vs_trips(self):
+        # assign hands to players
+        self.p1.set_hand(hc.pair)
+        self.p2.set_hand(hc.trips)
+
+        # add to players array
+        self.players.append(self.p1)
+        self.players.append(self.p2)
+
+        # winning description and results of winninghand
         _winning_desc = 'trips'
-        self.assertEqual(pe.winninghand(players),(hc.trips, _winning_desc))
+        r_player, r_winning_desc = pe.winninghand(self.players)
+
+        self.assertEqual(r_player, self.p2)
+        self.assertEqual(r_winning_desc, _winning_desc)
     
     def test_multiple_players(self):
-        players = []
-        players.append(hc.pair)
-        players.append(hc.two_pair)
-        players.append(hc.trips)
-        players.append(hc.full_house)
+        # assign hands to players
+        self.p1.set_hand(hc.pair)
+        self.p2.set_hand(hc.two_pair)
+        self.p3.set_hand(hc.trips)
+        self.p4.set_hand(hc.full_house)
 
-        players_diff_order = []
-        players_diff_order.append(hc.full_house)
-        players_diff_order.append(hc.trips)
-        players_diff_order.append(hc.two_pair)
-        players_diff_order.append(hc.pair)
+        # add players to players array
+        self.players.append(self.p1)
+        self.players.append(self.p2)
+        self.players.append(self.p3)
+        self.players.append(self.p4)
 
+        # add players to players_diff_order array
+        self.players_diff_order.append(self.p4)
+        self.players_diff_order.append(self.p3)
+        self.players_diff_order.append(self.p2)
+        self.players_diff_order.append(self.p1)
+
+        # winning description and results of winninghand
         _winning_desc = 'full house'
-        result = (hc.full_house, _winning_desc)
-        self.assertEqual(pe.winninghand(players), result)
-        self.assertEqual(pe.winninghand(players_diff_order), result)
+        r_player, r_winning_desc = pe.winninghand(self.players)
+        r_do_player, r_do_winning_desc = pe.winninghand(self.players_diff_order)
+
+        # tests
+        self.assertEqual(r_player, self.p4)
+        self.assertEqual(r_winning_desc, _winning_desc)
+        self.assertEqual(r_do_player, self.p4)
+        self.assertEqual(r_do_winning_desc, _winning_desc)
 
 
     def test_same_ranking_high_card(self):
@@ -176,6 +207,10 @@ class TestWinningHand(unittest.TestCase):
         _winning_desc = 'straight'
         result = ([hc.tied_hand_straight, hc.tied_hand_straight_two], _winning_desc)
         self.assertEqual(pe.winninghand(players), result)
+    
+    def tearDown(self):
+        self.players.clear()
+        self.players_diff_order.clear() 
 
 if __name__ == '__main___':
     unittest.main()

@@ -25,5 +25,8 @@ class Player:
     def get_hand(self):
         return self.hand
     
+    def set_hand(self, hand):
+        self.hand = hand
+    
     def winpot(self, amount):
         self.stack += amount

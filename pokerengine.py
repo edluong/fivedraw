@@ -28,7 +28,10 @@ def _straight_and_or_flush(rank_list, suit_list):
         result = 'straight' if _isStraight(rank_list) else 'high card'
     return result
 
-def _same_rank_winning_hand(handone, handtwo):
+def _same_rank_winning_hand(playerone, playertwo):
+
+    handone = playerone.get_hand()
+    handtwo = playertwo.get_hand()
 
     # find the different cards from the both hands
     diff_one = set(handone).difference(set(handtwo))
@@ -97,7 +100,7 @@ def hand_rank(hand):
 
 def winninghand(players):
     '''
-    Takes an array of players hands and finds the best hand
+    Takes an array of Player objects and finds the best hand
 
     Parameters:
     argument1 (array): this will be an array of hand objects
@@ -108,13 +111,13 @@ def winninghand(players):
     ([(10,'D'),(J,'D')(Q,'D')(K,'D')(A,'D')], 'straight flush')
     '''
     _max_rank_strength = 0
-    _max_hand = None
+    _max_player = None
     _max_desc = None
     
-    for hand in players:
+    for player in players:
 
         # get a ranking for the hand
-        handrank_tuple = hand_rank(hand)
+        handrank_tuple = hand_rank(player.get_hand())
         
         # separate out the results
         desc, rank_strength = handrank_tuple
@@ -124,8 +127,8 @@ def winninghand(players):
         # if its the same ranking, compare the actual cards
         if rank_strength > _max_rank_strength:
             _max_rank_strength = rank_strength
-            _max_hand = hand
+            _max_player = player
             _max_desc = desc
         elif rank_strength == _max_rank_strength:
-            _max_hand = _same_rank_winning_hand(_max_hand, hand)
-    return (_max_hand, _max_desc)
+            _max_player = _same_rank_winning_hand(_max_player, player)
+    return (_max_player, _max_desc)
