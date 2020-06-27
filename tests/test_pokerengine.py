@@ -111,11 +111,12 @@ class TestWinningHand(unittest.TestCase):
         self.assertEqual(r_do_player, self.players.get('full_house'))
         self.assertEqual(r_do_winning_desc, _winning_desc)
 
-
     def test_same_ranking_high_card(self):
+        # load two types of ordering of player arrays
         _players = [self.players.get('high_card'), self.players.get('high_card_ace')] 
         _players_diff_order = [self.players.get('high_card_ace'), self.players.get('high_card')] 
 
+        # results
         _winning_desc = 'high card'
         r_player, r_winning_desc = pe.winninghand(_players)
         r_do_player, r_do_winning_desc = pe.winninghand(_players_diff_order)
@@ -127,72 +128,75 @@ class TestWinningHand(unittest.TestCase):
         self.assertEqual(r_do_winning_desc, _winning_desc)
     
     def test_same_ranking_flush(self):
-        players = []
-        players.append(hc.flush_same_rank)
-        players.append(hc.flush_same_rank_win)
+        # load two types of ordering of player arrays
+        _players = [self.players.get('flush_same_rank'), self.players.get('flush_same_rank_win')] 
+        _players_diff_order = [self.players.get('flush_same_rank_win'), self.players.get('flush_same_rank')] 
 
-        players_diff_order = []
-        players_diff_order.append(hc.flush_same_rank_win)
-        players_diff_order.append(hc.flush_same_rank)
-        
+        # results
         _winning_desc = 'flush'
-        result = (hc.flush_same_rank_win, _winning_desc)
-        self.assertEqual(pe.winninghand(players), result)
-        self.assertEqual(pe.winninghand(players_diff_order), result)
+        r_player, r_winning_desc = pe.winninghand(_players)
+        r_do_player, r_do_winning_desc = pe.winninghand(_players_diff_order)
+
+        # tests
+        self.assertEqual(r_player, self.players.get('flush_same_rank_win'))
+        self.assertEqual(r_winning_desc, _winning_desc)
+        self.assertEqual(r_do_player, self.players.get('flush_same_rank_win'))
+        self.assertEqual(r_do_winning_desc, _winning_desc)
     
     def test_same_ranking_fullhouse(self):
-        players = []
-        players.append(hc.full_house)
-        players.append(hc.full_house_aces)
+        _players = [self.players.get('full_house'), self.players.get('full_house_aces')] 
+        _players_diff_order = [self.players.get('full_house_aces'), self.players.get('full_house')] 
 
-        players_diff_order = []
-        players_diff_order.append(hc.full_house_aces)
-        players_diff_order.append(hc.full_house)
-
+        # results
         _winning_desc = 'full house'
-        result = (hc.full_house_aces, _winning_desc)
-        self.assertEqual(pe.winninghand(players), result)
-        self.assertEqual(pe.winninghand(players_diff_order), result)
+        r_player, r_winning_desc = pe.winninghand(_players)
+        r_do_player, r_do_winning_desc = pe.winninghand(_players_diff_order)
+
+        # tests
+        self.assertEqual(r_player, self.players.get('full_house_aces'))
+        self.assertEqual(r_winning_desc, _winning_desc)
+        self.assertEqual(r_do_player, self.players.get('full_house_aces'))
+        self.assertEqual(r_do_winning_desc, _winning_desc)
     
     # example: 22XXX vs 22XXX
     def test_tied_pair(self):
-        players = []
-        players.append(hc.tied_hand_pair)
-        players.append(hc.tied_hand_pair_two)
+        _players = [self.players.get('tied_hand_pair'), self.players.get('tied_hand_pair_two')]
 
         _winning_desc = 'pair'
-        result = ([hc.tied_hand_pair, hc.tied_hand_pair_two], _winning_desc)
-        self.assertEqual(pe.winninghand(players), result)
+        r_players, r_winning_desc = pe.winninghand(_players)
+
+        self.assertEqual(_players, r_players)
+        self.assertEqual(_winning_desc, r_winning_desc)
     
     # example: AKQJ9 AKQJ9
     def test_tied_high_card(self):
-        players = []
-        players.append(hc.tied_hand_high_card)
-        players.append(hc.tied_hand_high_card_two)
+        _players = [self.players.get('tied_hand_high_card'), self.players.get('tied_hand_high_card_two')]
 
         _winning_desc = 'high card'
-        result = ([hc.tied_hand_high_card, hc.tied_hand_high_card_two], _winning_desc)
-        self.assertEqual(pe.winninghand(players), result)
+        r_players, r_winning_desc = pe.winninghand(_players)
+
+        self.assertEqual(_players, r_players)
+        self.assertEqual(_winning_desc, r_winning_desc)
     
     # example: AAKKQ vs AAKKQ
     def test_tied_two_pair(self):
-        players = []
-        players.append(hc.tied_hand_two_pair)
-        players.append(hc.tied_hand_two_pair_two)
+        _players = [self.players.get('tied_hand_two_pair'), self.players.get('tied_hand_two_pair_two')]
 
         _winning_desc = 'two pair'
-        result = ([hc.tied_hand_two_pair, hc.tied_hand_two_pair_two], _winning_desc)
-        self.assertEqual(pe.winninghand(players), result)
+        r_players, r_winning_desc = pe.winninghand(_players)
+
+        self.assertEqual(_players, r_players)
+        self.assertEqual(_winning_desc, r_winning_desc)
 
     # example: AKQJ10 vs AKQJ10
     def test_tied_straight(self):
-        players = []
-        players.append(hc.tied_hand_straight)
-        players.append(hc.tied_hand_straight_two)
+        _players = [self.players.get('tied_hand_straight'), self.players.get('tied_hand_straight')]
 
         _winning_desc = 'straight'
-        result = ([hc.tied_hand_straight, hc.tied_hand_straight_two], _winning_desc)
-        self.assertEqual(pe.winninghand(players), result)
+        r_players, r_winning_desc = pe.winninghand(_players)
+
+        self.assertEqual(_players, r_players)
+        self.assertEqual(_winning_desc, r_winning_desc)
 
 if __name__ == '__main___':
     unittest.main()
