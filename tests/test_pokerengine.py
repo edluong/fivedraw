@@ -72,28 +72,34 @@ class TestWinningHand(unittest.TestCase):
         self.players_diff_order = []
 
         # initialize the players
+        self.p_high_card = Player(_stack_size)
         self.p_pair = Player(_stack_size)
         self.p_two_pair = Player(_stack_size)
         self.p_trips = Player(_stack_size)
         self.p_full_house = Player(_stack_size)
 
         # set hands to players
+        self.p_high_card.set_hand(hc.high_card)
         self.p_pair.set_hand(hc.pair)
         self.p_two_pair.set_hand(hc.two_pair)
         self.p_trips.set_hand(hc.trips)
         self.p_full_house.set_hand(hc.full_house)
 
+        # new way of getting player objs
+        STARTING_STACK_SIZE = 100
+        self.playersv2 = hc.make_player_dict(hc.hands, STARTING_STACK_SIZE)
+
         
     def test_pair_vs_trips(self):
         # add to players array
-        self.players.append(self.p_pair)
-        self.players.append(self.p_trips)
+        _players = [self.playersv2.get('pair'), self.playersv2.get('trips')]
 
         # winning description and results of winninghand
         _winning_desc = 'trips'
-        r_player, r_winning_desc = pe.winninghand(self.players)
+        r_player, r_winning_desc = pe.winninghand(_players)
 
-        self.assertEqual(r_player, self.p_trips)
+        # tests
+        self.assertEqual(r_player, self.playersv2.get('trips'))
         self.assertEqual(r_winning_desc, _winning_desc)
     
     def test_multiple_players(self):
@@ -125,6 +131,8 @@ class TestWinningHand(unittest.TestCase):
         players = [] 
         players.append(hc.high_card)
         players.append(hc.high_card_ace)
+
+        players.append(self.p_high_card)
 
         # test different order
         players_diff_order = []

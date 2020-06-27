@@ -117,7 +117,7 @@ def winninghand(players):
     for player in players:
 
         # get a ranking for the hand
-        handrank_tuple = hand_rank(player.get_hand())
+        handrank_tuple = hand_rank(player.get_hand().get_hand())
         
         # separate out the results
         desc, rank_strength = handrank_tuple

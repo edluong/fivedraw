@@ -46,4 +46,13 @@ class Hand:
                     _list_to_remove.append(_card_tuple)
         for _card in _list_to_remove:
             self.hand.remove(_card)
+    
+    def set_hand(self, hand):
+        '''
+            settter method
+
+            Parameter: 
+            argument1 (array):  array comprises of tuples of "cards"
+        '''
+        self.hand = hand
                 
