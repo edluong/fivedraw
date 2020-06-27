@@ -67,63 +67,67 @@ class TestHandRankings(unittest.TestCase):
 class TestWinningHand(unittest.TestCase):
 
     def setUp(self):
-        _stack_size = 100
-        self.players = []
-        self.players_diff_order = []
+        # _stack_size = 100
+        # self.players = []
+        # self.players_diff_order = []
 
-        # initialize the players
-        self.p_high_card = Player(_stack_size)
-        self.p_pair = Player(_stack_size)
-        self.p_two_pair = Player(_stack_size)
-        self.p_trips = Player(_stack_size)
-        self.p_full_house = Player(_stack_size)
+        # # initialize the players
+        # self.p_high_card = Player(_stack_size)
+        # self.p_pair = Player(_stack_size)
+        # self.p_two_pair = Player(_stack_size)
+        # self.p_trips = Player(_stack_size)
+        # self.p_full_house = Player(_stack_size)
 
-        # set hands to players
-        self.p_high_card.set_hand(hc.high_card)
-        self.p_pair.set_hand(hc.pair)
-        self.p_two_pair.set_hand(hc.two_pair)
-        self.p_trips.set_hand(hc.trips)
-        self.p_full_house.set_hand(hc.full_house)
+        # # set hands to players
+        # self.p_high_card.set_hand(hc.high_card)
+        # self.p_pair.set_hand(hc.pair)
+        # self.p_two_pair.set_hand(hc.two_pair)
+        # self.p_trips.set_hand(hc.trips)
+        # self.p_full_house.set_hand(hc.full_house)
 
-        # new way of getting player objs
+        # get a dict of player objs
+        # static information
         STARTING_STACK_SIZE = 100
-        self.playersv2 = hc.make_player_dict(hc.hands, STARTING_STACK_SIZE)
+        self.players = hc.make_player_dict(hc.hands, STARTING_STACK_SIZE)
 
         
     def test_pair_vs_trips(self):
         # add to players array
-        _players = [self.playersv2.get('pair'), self.playersv2.get('trips')]
+        _players = [self.players.get('pair'), self.players.get('trips')]
 
         # winning description and results of winninghand
         _winning_desc = 'trips'
         r_player, r_winning_desc = pe.winninghand(_players)
 
         # tests
-        self.assertEqual(r_player, self.playersv2.get('trips'))
+        self.assertEqual(r_player, self.players.get('trips'))
         self.assertEqual(r_winning_desc, _winning_desc)
     
     def test_multiple_players(self):
         # add players to players array
-        self.players.append(self.p_pair)
-        self.players.append(self.p_two_pair)
-        self.players.append(self.p_trips)
-        self.players.append(self.p_full_house)
+        _players = []
+
+        _players.append(self.players.get('pair'))
+        _players.append(self.players.get('two_pair'))
+        _players.append(self.players.get('trips'))
+        _players.append(self.players.get('full_house'))
 
         # add players to players_diff_order array
-        self.players_diff_order.append(self.p_full_house)
-        self.players_diff_order.append(self.p_trips)
-        self.players_diff_order.append(self.p_two_pair)
-        self.players_diff_order.append(self.p_pair)
+        _players_diff_order = []
+        _players_diff_order.append(self.players.get('full_house'))
+        _players_diff_order.append(self.players.get('trips'))
+        _players_diff_order.append(self.players.get('two_pair'))
+        _players_diff_order.append(self.players.get('pair'))
 
         # winning description and results of winninghand
         _winning_desc = 'full house'
-        r_player, r_winning_desc = pe.winninghand(self.players)
-        r_do_player, r_do_winning_desc = pe.winninghand(self.players_diff_order)
+        r_player, r_winning_desc = pe.winninghand(_players)
+        r_do_player, r_do_winning_desc = pe.winninghand(_players_diff_order)
 
         # tests
-        self.assertEqual(r_player, self.p_full_house)
+        self.assertEqual(r_player, self.players.get('full_house'))
         self.assertEqual(r_winning_desc, _winning_desc)
-        self.assertEqual(r_do_player, self.p_full_house)
+        self.assertEqual(r_do_player, self.players.get('full_house'))
         self.assertEqual(r_do_winning_desc, _winning_desc)
 
 
@@ -212,10 +216,6 @@ class TestWinningHand(unittest.TestCase):
         _winning_desc = 'straight'
         result = ([hc.tied_hand_straight, hc.tied_hand_straight_two], _winning_desc)
         self.assertEqual(pe.winninghand(players), result)
-    
-    def tearDown(self):
-        self.players.clear()
-        self.players_diff_order.clear() 
 
 if __name__ == '__main___':
     unittest.main()
