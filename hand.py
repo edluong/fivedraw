@@ -1,4 +1,4 @@
-import constants as con 
+from constants import RANK_NAME
 
 class Hand:
     def __init__(self):
@@ -21,7 +21,7 @@ class Hand:
             _index, _card_tuple = card
             rank, suit = _card_tuple
             
-            rank_name = con.RANK_NAME.get(rank) or rank
+            rank_name = RANK_NAME.get(rank) or rank
             card_output = (rank_name, suit)
             print(f'{_index}: {card_output}')
 

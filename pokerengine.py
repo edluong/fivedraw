@@ -1,6 +1,6 @@
 # TODO - winninghand needs to account for four tied hands
 
-import constants as con
+from constants import STRAIGHT_WHEEL, RANKING
 
 def _isStraight(rank_list):
     ''' 
@@ -16,7 +16,7 @@ def _isStraight(rank_list):
     largest_rank = max(rank_list)
     recreate_rank_list = list(range(smallest_rank, largest_rank + 1))
 
-    return sorted(rank_list) == recreate_rank_list or sorted(rank_list) == con.STRAIGHT_WHEEL
+    return sorted(rank_list) == recreate_rank_list or sorted(rank_list) == STRAIGHT_WHEEL
 
 def _straight_and_or_flush(rank_list, suit_list):
     result = None
@@ -94,7 +94,7 @@ def hand_rank(hand):
             raise Exception('calculation error for full house or two pair')
     else:
         result = _straight_and_or_flush(ranks, suits)
-    return (result, con.RANKING[result])
+    return (result, RANKING[result])
 
 
 def winninghand(players):
