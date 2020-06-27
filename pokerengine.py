@@ -52,7 +52,7 @@ def hand_rank(hand):
     evaluates a hand of five cards
 
     Returns:
-    tuple: (rank number, rank name)
+    tuple: (rank name, rank number)
     '''
     result = None
     suits = [suit for rank,suit in hand]
@@ -68,7 +68,6 @@ def hand_rank(hand):
     
     # pair count with the corresponding ranking strength 
     # larger the better
-
     _pair_results = {
         2: 'pair',
         3: 'trips',
