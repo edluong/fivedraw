@@ -1,6 +1,6 @@
 # TODO - winninghand needs to account for four tied hands
 
-import constants as con
+from constants import STRAIGHT_WHEEL, RANKING
 
 def _isStraight(rank_list):
     ''' 
@@ -16,7 +16,7 @@ def _isStraight(rank_list):
     largest_rank = max(rank_list)
     recreate_rank_list = list(range(smallest_rank, largest_rank + 1))
 
-    return sorted(rank_list) == recreate_rank_list or sorted(rank_list) == con.STRAIGHT_WHEEL
+    return sorted(rank_list) == recreate_rank_list or sorted(rank_list) == STRAIGHT_WHEEL
 
 def _straight_and_or_flush(rank_list, suit_list):
     result = None
@@ -28,7 +28,10 @@ def _straight_and_or_flush(rank_list, suit_list):
         result = 'straight' if _isStraight(rank_list) else 'high card'
     return result
 
-def _same_rank_winning_hand(handone, handtwo):
+def _same_rank_winning_hand(playerone, playertwo):
+
+    handone = playerone.get_hand().get_hand()
+    handtwo = playertwo.get_hand().get_hand()
 
     # find the different cards from the both hands
     diff_one = set(handone).difference(set(handtwo))
@@ -38,18 +41,18 @@ def _same_rank_winning_hand(handone, handtwo):
     ranks_handtwo = [rank for rank, suit in handtwo]
 
     if sorted(ranks_handone) == sorted(ranks_handtwo):
-        return [handone, handtwo] # return both hands
+        return [playerone, playertwo] # return both hands
     elif max(diff_one) > max(diff_two):
-        return handone
+        return playerone
     else:
-        return handtwo
+        return playertwo
 
 def hand_rank(hand):
     '''
     evaluates a hand of five cards
 
     Returns:
-    tuple: (rank number, rank name)
+    tuple: (rank name, rank number)
     '''
     result = None
     suits = [suit for rank,suit in hand]
@@ -65,7 +68,6 @@ def hand_rank(hand):
     
     # pair count with the corresponding ranking strength 
     # larger the better
-
     _pair_results = {
         2: 'pair',
         3: 'trips',
@@ -92,12 +94,12 @@ def hand_rank(hand):
             raise Exception('calculation error for full house or two pair')
     else:
         result = _straight_and_or_flush(ranks, suits)
-    return (result, con.RANKING[result])
+    return (result, RANKING[result])
 
 
 def winninghand(players):
     '''
-    Takes an array of players hands and finds the best hand
+    Takes an array of Player objects and finds the best hand
 
     Parameters:
     argument1 (array): this will be an array of hand objects
@@ -108,13 +110,13 @@ def winninghand(players):
     ([(10,'D'),(J,'D')(Q,'D')(K,'D')(A,'D')], 'straight flush')
     '''
     _max_rank_strength = 0
-    _max_hand = None
+    _max_player = None
     _max_desc = None
     
-    for hand in players:
+    for player in players:
 
         # get a ranking for the hand
-        handrank_tuple = hand_rank(hand)
+        handrank_tuple = hand_rank(player.get_hand().get_hand())
         
         # separate out the results
         desc, rank_strength = handrank_tuple
@@ -124,8 +126,8 @@ def winninghand(players):
         # if its the same ranking, compare the actual cards
         if rank_strength > _max_rank_strength:
             _max_rank_strength = rank_strength
-            _max_hand = hand
+            _max_player = player
             _max_desc = desc
         elif rank_strength == _max_rank_strength:
-            _max_hand = _same_rank_winning_hand(_max_hand, hand)
-    return (_max_hand, _max_desc)
+            _max_player = _same_rank_winning_hand(_max_player, player)
+    return (_max_player, _max_desc)

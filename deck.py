@@ -1,10 +1,10 @@
 from card import Card
 from random import shuffle
-import constants as con
+from constants import SUIT
 
 class Deck:
 
-    suit = con.SUIT
+    suit = SUIT
 
     def load_deck(self):
         return [(rank,suit) for rank in range(2,15) for suit in self.suit]
