@@ -1,92 +1,92 @@
 import unittest
 
-import constants as con
+from constants import RANKING
 from player import Player
-import pokerengine as pe # TODO - use from and import the methods
-import tests.test_hand_constants as hc # added tests. since Makefile is above
+from pokerengine import hand_rank, winninghand
+from tests.test_hand_constants import hands, make_player_dict # added tests. since Makefile is above
 
 class TestHandRankings(unittest.TestCase):
     def setUp(self):
-        self.hands = hc.hands
+        self.hands = hands
     
     def test_high_card(self):
         rank_desc = 'high card'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('high_card'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('high_card'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
 
     def test_pair(self):
         rank_desc = 'pair'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('pair'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('pair'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
     
     def test_two_pair(self):
         rank_desc = 'two pair'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('two_pair'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('two_pair'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
 
     def test_trips(self):
         rank_desc = 'trips'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('trips'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('trips'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
 
     def test_straight(self):
         rank_desc = 'straight'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('straight'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('straight'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
 
     # A2345
     def test_straight_wheel(self):
         rank_desc = 'straight'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('straight_wheel'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('straight_wheel'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
 
     # 10JQKA
     def test_straight_broadway(self):
         rank_desc = 'straight'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('straight_broadway'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('straight_broadway'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
 
     def test_flush(self):
         rank_desc = 'flush'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('flush'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('flush'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
 
     def test_full_house(self):
         rank_desc = 'full house'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('full_house'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('full_house'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
     
     def test_quads(self):
         rank_desc = 'quads'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('quads'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('quads'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
 
     def test_straight_flush(self):
         rank_desc = 'straight flush'
-        r_rank_name, r_ranking_num = pe.hand_rank(self.hands.get('straight_flush'))
+        r_rank_name, r_ranking_num = hand_rank(self.hands.get('straight_flush'))
         #tests
         self.assertEqual(r_rank_name, rank_desc)
-        self.assertEqual(r_ranking_num, con.RANKING.get(rank_desc))
+        self.assertEqual(r_ranking_num, RANKING.get(rank_desc))
 
 class TestWinningHand(unittest.TestCase):
 
@@ -94,7 +94,7 @@ class TestWinningHand(unittest.TestCase):
         # get a dict of player objs
         # static information
         STARTING_STACK_SIZE = 100
-        self.players = hc.make_player_dict(hc.hands, STARTING_STACK_SIZE)
+        self.players = make_player_dict(hands, STARTING_STACK_SIZE)
         
     def test_pair_vs_trips(self):
         # add to players array
@@ -102,7 +102,7 @@ class TestWinningHand(unittest.TestCase):
 
         # winning description and results of winninghand
         _winning_desc = 'trips'
-        r_player, r_winning_desc = pe.winninghand(_players)
+        r_player, r_winning_desc = winninghand(_players)
 
         # tests
         self.assertEqual(r_player, self.players.get('trips'))
@@ -126,8 +126,8 @@ class TestWinningHand(unittest.TestCase):
 
         # winning description and results of winninghand
         _winning_desc = 'full house'
-        r_player, r_winning_desc = pe.winninghand(_players)
-        r_do_player, r_do_winning_desc = pe.winninghand(_players_diff_order)
+        r_player, r_winning_desc = winninghand(_players)
+        r_do_player, r_do_winning_desc = winninghand(_players_diff_order)
 
         # tests
         self.assertEqual(r_player, self.players.get('full_house'))
@@ -142,8 +142,8 @@ class TestWinningHand(unittest.TestCase):
 
         # results
         _winning_desc = 'high card'
-        r_player, r_winning_desc = pe.winninghand(_players)
-        r_do_player, r_do_winning_desc = pe.winninghand(_players_diff_order)
+        r_player, r_winning_desc = winninghand(_players)
+        r_do_player, r_do_winning_desc = winninghand(_players_diff_order)
 
         # tests
         self.assertEqual(r_player, self.players.get('high_card_ace'))
@@ -158,8 +158,8 @@ class TestWinningHand(unittest.TestCase):
 
         # results
         _winning_desc = 'flush'
-        r_player, r_winning_desc = pe.winninghand(_players)
-        r_do_player, r_do_winning_desc = pe.winninghand(_players_diff_order)
+        r_player, r_winning_desc = winninghand(_players)
+        r_do_player, r_do_winning_desc = winninghand(_players_diff_order)
 
         # tests
         self.assertEqual(r_player, self.players.get('flush_same_rank_win'))
@@ -173,8 +173,8 @@ class TestWinningHand(unittest.TestCase):
 
         # results
         _winning_desc = 'full house'
-        r_player, r_winning_desc = pe.winninghand(_players)
-        r_do_player, r_do_winning_desc = pe.winninghand(_players_diff_order)
+        r_player, r_winning_desc = winninghand(_players)
+        r_do_player, r_do_winning_desc = winninghand(_players_diff_order)
 
         # tests
         self.assertEqual(r_player, self.players.get('full_house_aces'))
@@ -187,7 +187,7 @@ class TestWinningHand(unittest.TestCase):
         _players = [self.players.get('tied_hand_pair'), self.players.get('tied_hand_pair_two')]
 
         _winning_desc = 'pair'
-        r_players, r_winning_desc = pe.winninghand(_players)
+        r_players, r_winning_desc = winninghand(_players)
 
         self.assertEqual(_players, r_players)
         self.assertEqual(_winning_desc, r_winning_desc)
@@ -197,7 +197,7 @@ class TestWinningHand(unittest.TestCase):
         _players = [self.players.get('tied_hand_high_card'), self.players.get('tied_hand_high_card_two')]
 
         _winning_desc = 'high card'
-        r_players, r_winning_desc = pe.winninghand(_players)
+        r_players, r_winning_desc = winninghand(_players)
 
         self.assertEqual(_players, r_players)
         self.assertEqual(_winning_desc, r_winning_desc)
@@ -207,7 +207,7 @@ class TestWinningHand(unittest.TestCase):
         _players = [self.players.get('tied_hand_two_pair'), self.players.get('tied_hand_two_pair_two')]
 
         _winning_desc = 'two pair'
-        r_players, r_winning_desc = pe.winninghand(_players)
+        r_players, r_winning_desc = winninghand(_players)
 
         self.assertEqual(_players, r_players)
         self.assertEqual(_winning_desc, r_winning_desc)
@@ -217,7 +217,7 @@ class TestWinningHand(unittest.TestCase):
         _players = [self.players.get('tied_hand_straight'), self.players.get('tied_hand_straight')]
 
         _winning_desc = 'straight'
-        r_players, r_winning_desc = pe.winninghand(_players)
+        r_players, r_winning_desc = winninghand(_players)
 
         self.assertEqual(_players, r_players)
         self.assertEqual(_winning_desc, r_winning_desc)
