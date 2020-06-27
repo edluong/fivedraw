@@ -67,29 +67,10 @@ class TestHandRankings(unittest.TestCase):
 class TestWinningHand(unittest.TestCase):
 
     def setUp(self):
-        # _stack_size = 100
-        # self.players = []
-        # self.players_diff_order = []
-
-        # # initialize the players
-        # self.p_high_card = Player(_stack_size)
-        # self.p_pair = Player(_stack_size)
-        # self.p_two_pair = Player(_stack_size)
-        # self.p_trips = Player(_stack_size)
-        # self.p_full_house = Player(_stack_size)
-
-        # # set hands to players
-        # self.p_high_card.set_hand(hc.high_card)
-        # self.p_pair.set_hand(hc.pair)
-        # self.p_two_pair.set_hand(hc.two_pair)
-        # self.p_trips.set_hand(hc.trips)
-        # self.p_full_house.set_hand(hc.full_house)
-
         # get a dict of player objs
         # static information
         STARTING_STACK_SIZE = 100
         self.players = hc.make_player_dict(hc.hands, STARTING_STACK_SIZE)
-
         
     def test_pair_vs_trips(self):
         # add to players array
@@ -132,22 +113,18 @@ class TestWinningHand(unittest.TestCase):
 
 
     def test_same_ranking_high_card(self):
-        players = [] 
-        players.append(hc.high_card)
-        players.append(hc.high_card_ace)
-
-        players.append(self.p_high_card)
-
-        # test different order
-        players_diff_order = []
-        players_diff_order.append(hc.high_card_ace)
-        players_diff_order.append(hc.high_card)
+        _players = [self.players.get('high_card'), self.players.get('high_card_ace')] 
+        _players_diff_order = [self.players.get('high_card_ace'), self.players.get('high_card')] 
 
         _winning_desc = 'high card'
-        result = (hc.high_card_ace, _winning_desc)
+        r_player, r_winning_desc = pe.winninghand(_players)
+        r_do_player, r_do_winning_desc = pe.winninghand(_players_diff_order)
 
-        self.assertEqual(pe.winninghand(players), result)
-        self.assertEqual(pe.winninghand(players_diff_order), result)
+        # tests
+        self.assertEqual(r_player, self.players.get('high_card_ace'))
+        self.assertEqual(r_winning_desc, _winning_desc)
+        self.assertEqual(r_do_player, self.players.get('high_card_ace'))
+        self.assertEqual(r_do_winning_desc, _winning_desc)
     
     def test_same_ranking_flush(self):
         players = []

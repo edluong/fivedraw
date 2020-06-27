@@ -30,8 +30,8 @@ def _straight_and_or_flush(rank_list, suit_list):
 
 def _same_rank_winning_hand(playerone, playertwo):
 
-    handone = playerone.get_hand()
-    handtwo = playertwo.get_hand()
+    handone = playerone.get_hand().get_hand()
+    handtwo = playertwo.get_hand().get_hand()
 
     # find the different cards from the both hands
     diff_one = set(handone).difference(set(handtwo))
@@ -41,11 +41,11 @@ def _same_rank_winning_hand(playerone, playertwo):
     ranks_handtwo = [rank for rank, suit in handtwo]
 
     if sorted(ranks_handone) == sorted(ranks_handtwo):
-        return [handone, handtwo] # return both hands
+        return [playerone, playertwo] # return both hands
     elif max(diff_one) > max(diff_two):
-        return handone
+        return playerone
     else:
-        return handtwo
+        return playertwo
 
 def hand_rank(hand):
     '''
