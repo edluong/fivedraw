@@ -29,7 +29,7 @@ class TestGame(unittest.TestCase):
     # resources used to get this to work
     # https://stackoverflow.com/a/47690244/4376173
     # https://www.youtube.com/watch?v=ClAdw7ZJf5E
-    @patch('game.input', create=True)
+    @patch('game.input')
     def test_discard_choice_bad_input(self, m_input):
         '''
             @patch('game.input') - want to patch game module's input() function, watch yt vid for more info
@@ -39,14 +39,12 @@ class TestGame(unittest.TestCase):
             after will then choose the next entry in the array, run discard_choice(), then assert again
             try except is used to make sure it hits the end of the inputs or side_effect will throw a StopIteration
         '''
-        try:
-            m_input.side_effect = ['-1','test']
-            result = self.game.discard_choice()
+        m_input.side_effect = ['-1','test','1 12']
+        result = self.game.discard_choice()
+        self.assertRaises(result, CardNumberDoesNotExistError)
+        self.assertRaises(result, ValueError)
+        self.assertRaises(result, CardNumberDoesNotExistError)
 
-            self.assertRaises(result, CardNumberDoesNotExistError)
-            self.assertRaises(result, ValueError)
-        except StopIteration:
-            return True
 
     def test_add_pot_size(self):
         self.game.add_pot_size(10)
