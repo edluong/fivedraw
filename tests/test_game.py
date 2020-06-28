@@ -29,14 +29,15 @@ class TestGame(unittest.TestCase):
     # resources used to get this to work
     # https://stackoverflow.com/a/47690244/4376173
     # https://www.youtube.com/watch?v=ClAdw7ZJf5E
-    @patch('game.input', return_value='test', create=True)
+    @patch('game.input', create=True)
     def test_discard_choice_bad_input(self, m_input):
         '''
-            we want to mock the input() inside the game module, refer to youtube video for details
-            discard_choice() is in a loop, so needed a list of mock side_effect
-            the loop will run the first entry, run discard_choice(), then the assert
+            @patch('game.input') - want to patch game module's input() function, watch yt vid for more info
+            m_input - is the mock object being passed into the test
+            discard_choice() is run in a loop, so needed a list of mock side_effect
+            the loop will run the first entry, run discard_choice(), then the assert first exception
             after will then choose the next entry in the array, run discard_choice(), then assert again
-            try except is used to make sure we hit the end of the inputs or side_effect will throw a StopIteration
+            try except is used to make sure it hits the end of the inputs or side_effect will throw a StopIteration
         '''
         try:
             m_input.side_effect = ['-1','test']
