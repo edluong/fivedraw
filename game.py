@@ -46,8 +46,8 @@ class Game:
     
     def deal_cards(self):
         # deal the cards out the the players
-        self._draw_hand(self.player.get_hand(), self.deck)
-        self._draw_hand(self.cpu.get_hand(), self.deck)
+        self._draw_hand(self.player.hand, self.deck)
+        self._draw_hand(self.cpu.hand, self.deck)
 
         # display the cards
         self._display(self.player)
@@ -126,28 +126,20 @@ class Game:
             Returns: void
         '''
         payout_amount = self.pot_size / len(players)
-        
-        
+
         # pay all the winners
         for player in players:
             player.winpot(payout_amount)
         
         # reset the pot size
         self.pot_size = 0
-
-
-    def update_turn_state(self,state):
-        self.turn_state = state
-    
+  
     def current_turn_state(self):
         return self.states.get(self.turn_state)
 
     def add_pot_size(self, new_amt):
-        self.pot_size+=new_amt
+        self.pot_size += new_amt
     
-    def current_pot_size(self):
-        return self.pot_size
-
     def reset_pot_size(self):
         self.pot_size = 0
 
