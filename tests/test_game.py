@@ -26,8 +26,26 @@ class TestGame(unittest.TestCase):
         # card amounts is correct in the deck, 10 cards are passed out
         self.assertEqual(self.game.deck.deck_size(), 42)
 
-    def test_discard_choice(self):
-        pass
+    # resources used to get this to work
+    # https://stackoverflow.com/a/47690244/4376173
+    # https://www.youtube.com/watch?v=ClAdw7ZJf5E
+    @patch('game.input', return_value='test', create=True)
+    def test_discard_choice_bad_input(self, m_input):
+        '''
+            we want to mock the input() inside the game module, refer to youtube video for details
+            discard_choice() is in a loop, so needed a list of mock side_effect
+            the loop will run the first entry, run discard_choice(), then the assert
+            after will then choose the next entry in the array, run discard_choice(), then assert again
+            try except is used to make sure we hit the end of the inputs or side_effect will throw a StopIteration
+        '''
+        try:
+            m_input.side_effect = ['-1','test']
+            result = self.game.discard_choice()
+
+            self.assertRaises(result, CardNumberDoesNotExistError)
+            self.assertRaises(result, ValueError)
+        except StopIteration:
+            return True
 
     def test_add_pot_size(self):
         self.game.add_pot_size(10)
