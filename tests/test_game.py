@@ -1,11 +1,13 @@
+import sys
 import unittest
+from unittest.mock import patch
 
-from game import Game
+from game import Game, CardNumberDoesNotExistError
 
 class TestGame(unittest.TestCase):
     
     def setUp(self):
-        self.game = Game(100) # starting stack, turn_state, pot_size
+        self.game = Game(100) # starting stack
     
     def test_init_load_correctly(self):
         # testing init loaded up correctly        
@@ -29,11 +31,11 @@ class TestGame(unittest.TestCase):
 
     def test_add_pot_size(self):
         self.game.add_pot_size(10)
-        self.assertEqual(10, self.game.current_pot_size())
+        self.assertEqual(10, self.game.pot_size)
 
     def test_reset_game(self):
         self.game.reset_game()
-        self.assertEqual(0, self.game.current_pot_size())
+        self.assertEqual(0, self.game.pot_size)
         self.assertEqual('predeal', self.game.current_turn_state())
 
     if __name__ == '__main__':
