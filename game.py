@@ -16,38 +16,49 @@ class Game:
             3: 'draw',
             5: 'showdown'
     }
-
-    def print_players_stack(self, player):
-        print(f'Stack Size: {player.stack_size()}')
-    
+  
     def _draw_hand(self, hand, deck, numCards = 5):
         for _ in range(numCards):
             hand.add_card(deck.draw())
 
     def _display(self, player, playertype='p'):
+        '''
+            Prints out the stats
+
+            Example Output:
+
+            Your Hand:
+            1: (2, 'Diamonds')
+            2: (2, 'Spades')
+            3: (5, 'Spades')
+            4: ('King', 'Spades')
+            5: ('Ace', 'Spades')
+            You have: pair
+            Stack Size: 200
+        '''
         PLAYER_HAND = 'Your Hand:'
         CPU_HAND = 'CPU Hand:'
         PLAYER_RESULT = 'You have:'
         CPU_RESULT = 'CPU has:'
         
-        print('\n')
+        # hand details
         _hand_msg = CPU_HAND if playertype == 'c' else PLAYER_HAND
-        print(_hand_msg, end='\n')
-        player.get_hand().print_hand()
-        _rank = hand_rank(player.get_hand().get_hand())
+        print(f'\n{_hand_msg}', end='\n')
+        player.hand.print_hand()
 
         # get the ranking of the hand
+        _rank = hand_rank(player.hand.hand)
         _result, _ = _rank
         _result_msg = CPU_RESULT if playertype == 'c' else PLAYER_RESULT
         print(f'{_result_msg} {_result}')
 
         # get stack size
-        self.print_players_stack(player)
+        print(f'Stack Size: {player.stack}')
     
     def deal_cards(self):
         # deal the cards out the the players
-        self._draw_hand(self.player.get_hand(), self.deck)
-        self._draw_hand(self.cpu.get_hand(), self.deck)
+        self._draw_hand(self.player.hand, self.deck)
+        self._draw_hand(self.cpu.hand, self.deck)
 
         # display the cards
         self._display(self.player)
@@ -71,35 +82,40 @@ class Game:
         # deal the cards
         self.deal_cards()
 
-    def discard_choice(self):
-        _indexes = [] # input for cards to discard
+    def discard_choices_input(self):
+        return input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
+
+    def discard_choices_validate(self):
+        _choices = []
         while True:
-
             try:
-                discard_choices = input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
-
+                discard_choices = self.discard_choices_input()
                 if 'quit' in discard_choices:
                     sys.exit(0)
 
-                for _index in discard_choices.split(' '):
-                    if _index.lower() == 'k':
+                for _choice in discard_choices.split(' '):
+                    if _choice.lower() == 'k':
                         break
-                    elif int(_index) < 0 or int(_index) > 5 :
+                    elif int(_choice) < 0 or int(_choice) > 5 :
                         raise CardNumberDoesNotExistError
                     else:
-                        _indexes.append(int(_index))
+                        _choices.append(int(_choice))
                 break
             except ValueError:
                 print('Integer was not entered in!')
             except CardNumberDoesNotExistError:
                 print("Card Number doesn't exist! Values must be between 1 through 5!")
-        
-        if _indexes:    
-            self.player.get_hand().discard(_indexes)
+        return _choices
 
+    def discard_choice(self):
+        _choices = self.discard_choices_validate()
+        
+        if _choices:
+            self.player.hand.discard(_choices)
+        
         # re-draw hand
-        self._draw_hand(self.player.get_hand(), self.deck, len(_indexes))
-        self._display(self.player) # display the card to the player
+        self._draw_hand(self.player.hand, self.deck, len(_choices))
+        self._display(self.player) # display the cards to the player
     
     def betting_round(self, player):
         try:
@@ -126,28 +142,20 @@ class Game:
             Returns: void
         '''
         payout_amount = self.pot_size / len(players)
-        
-        
+
         # pay all the winners
         for player in players:
             player.winpot(payout_amount)
         
         # reset the pot size
         self.pot_size = 0
-
-
-    def update_turn_state(self,state):
-        self.turn_state = state
-    
+  
     def current_turn_state(self):
         return self.states.get(self.turn_state)
 
     def add_pot_size(self, new_amt):
-        self.pot_size+=new_amt
+        self.pot_size += new_amt
     
-    def current_pot_size(self):
-        return self.pot_size
-
     def reset_pot_size(self):
         self.pot_size = 0
 
@@ -161,5 +169,5 @@ class Game:
     
     def reset(self):
         self.deck.reload()
-        self.player.get_hand().reset_hand()
-        self.cpu.get_hand().reset_hand()
+        self.player.hand.reset_hand()
+        self.cpu.hand.reset_hand()

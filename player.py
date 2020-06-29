@@ -22,9 +22,6 @@ class Player:
     def stack_size(self):
         return self.stack
     
-    def get_hand(self):
-        return self.hand
-    
     def set_hand(self, hand):
         self.hand = hand
     
