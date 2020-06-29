@@ -48,6 +48,11 @@ class TestGame(unittest.TestCase):
     @patch('builtins.input', return_value = 'test')
     @patch('builtins.print', side_effect = ValueError('Integer was not entered in!'))
     def test_discard_choices_validate_value_error(self, mocked_input, mocked_print):
+        '''
+            Need to mock the input and type in "test"
+            this would then create a side effect in print where ValueError is raised
+            check if this happens with the method
+        '''
         with self.assertRaises(ValueError):
             self.game.discard_choices_validate()
      
