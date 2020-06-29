@@ -82,33 +82,39 @@ class Game:
         # deal the cards
         self.deal_cards()
 
-    def discard_choice(self):
-        _indexes = [] # input for cards to discard
+    def discard_choices_input(self):
+        return input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
+
+    def discard_choices_validate(self):
+        _choices = []
         while True:
             try:
-                discard_choices = input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
-
+                discard_choices = self.discard_choices_input()
                 if 'quit' in discard_choices:
                     sys.exit(0)
 
-                for _index in discard_choices.split(' '):
-                    if _index.lower() == 'k':
+                for _choice in discard_choices.split(' '):
+                    if _choice.lower() == 'k':
                         break
-                    elif int(_index) < 0 or int(_index) > 5 :
+                    elif int(_choice) < 0 or int(_choice) > 5 :
                         raise CardNumberDoesNotExistError
                     else:
-                        _indexes.append(int(_index))
+                        _choices.append(int(_choice))
                 break
             except ValueError:
                 print('Integer was not entered in!')
             except CardNumberDoesNotExistError:
                 print("Card Number doesn't exist! Values must be between 1 through 5!")
-        
-        if _indexes:    
-            self.player.hand.discard(_indexes)
+        return _choices
 
+    def discard_choice(self):
+        _choices = self.discard_choices_validate()
+        
+        if _choices:
+            self.player.hand.discard(_choices)
+        
         # re-draw hand
-        self._draw_hand(self.player.hand, self.deck, len(_indexes))
+        self._draw_hand(self.player.hand, self.deck, len(_choices))
         self._display(self.player) # display the cards to the player
     
     def betting_round(self, player):

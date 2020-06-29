@@ -26,25 +26,23 @@ class TestGame(unittest.TestCase):
         # card amounts is correct in the deck, 10 cards are passed out
         self.assertEqual(self.game.deck.deck_size(), 42)
 
-    # resources used to get this to work
-    # https://stackoverflow.com/a/47690244/4376173
-    # https://www.youtube.com/watch?v=ClAdw7ZJf5E
-    @patch('game.input')
-    def test_discard_choice_bad_input(self, m_input):
+    @patch('game.Game.discard_choices_input', return_value ='1 2 3')
+    def test_discard_choices_validate(self, m_input):
         '''
-            @patch('game.input') - want to patch game module's input() function, watch yt vid for more info
-            m_input - is the mock object being passed into the test
-            discard_choice() is run in a loop, so needed a list of mock side_effect
-            the loop will run the first entry, run discard_choice(), then the assert first exception
-            after will then choose the next entry in the array, run discard_choice(), then assert again
-            try except is used to make sure it hits the end of the inputs or side_effect will throw a StopIteration
+            mock discard_choices_input to return 1 2 3
+            expecting the result to equal the array [1,2,3]
         '''
-        m_input.side_effect = ['-1','test','1 12']
-        result = self.game.discard_choice()
-        self.assertRaises(result, CardNumberDoesNotExistError)
-        self.assertRaises(result, ValueError)
-        self.assertRaises(result, CardNumberDoesNotExistError)
-
+        result = self.game.discard_choices_validate()
+        self.assertEqual(result, [1, 2, 3])
+    
+    @patch('game.Game.discard_choices_input', return_value ='5 1')
+    def test_discard_choices_validate_2(self, m_input):
+        '''
+            mock discard_choices_input to return 5 1
+            expecting the result to equal the array [5, 1]
+        '''
+        result = self.game.discard_choices_validate()
+        self.assertEqual(result, [5, 1])
 
     def test_add_pot_size(self):
         self.game.add_pot_size(10)
