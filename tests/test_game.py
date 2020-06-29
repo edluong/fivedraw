@@ -43,6 +43,20 @@ class TestGame(unittest.TestCase):
         '''
         result = self.game.discard_choices_validate()
         self.assertEqual(result, [5, 1])
+    
+    # inspiration: https://stackoverflow.com/a/61941348/4376173
+    @patch('builtins.input', return_value = 'test')
+    @patch('builtins.print', side_effect = ValueError('Integer was not entered in!'))
+    def test_discard_choices_validate_value_error(self, mocked_input, mocked_print):
+        with self.assertRaises(ValueError):
+            self.game.discard_choices_validate()
+     
+    # inspiration: https://stackoverflow.com/a/61941348/4376173
+    @patch('builtins.input', return_value='123')
+    @patch('builtins.print', side_effect = CardNumberDoesNotExistError("Card Number doesn't exist! Values must be between 1 through 5!"))
+    def test_discard_choices_validate_cardnumberDNE_error(self, mocked_input, mocked_print):
+        with self.assertRaises(CardNumberDoesNotExistError):
+            self.game.discard_choices_validate()
 
     def test_add_pot_size(self):
         self.game.add_pot_size(10)
