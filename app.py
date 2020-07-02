@@ -6,6 +6,7 @@ if __name__ == "__main__":
     game = Game(STARTING_STACK)
     game.betting_round()
     game.discard_choice()
+    # level 0 cpu should randomly discard
     game.betting_round()
     game.payout()
 
