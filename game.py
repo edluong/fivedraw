@@ -81,9 +81,6 @@ class Game:
         self.deck = Deck()
         self.deck.shuffle()
 
-        # # deal the cards
-        # self.deal_cards()
-
     def discard_choices_input(self):
         return input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
 
@@ -130,11 +127,13 @@ class Game:
                     # cpu wins the pot
                     # TODO - needs to get the blinds working
                     self.cpu.winpot(self.pot_size)
-                    print(f'CPU wins {self.pot_size}')
+                    print(f'CPU wins {self.pot_size}\n')
+                    self.reset() # soft reset
                     break
                 elif action == 'check':
                     no_bet = 0
                     self.cpu.cpu_decision(action, no_bet) 
+                    self.state = 1 if self.state == 0 else 3
                     break
                 elif action == 'bet':
                     while True:
@@ -155,6 +154,7 @@ class Game:
                             break
                         except ValueError:
                             print(f'{bet_amount} was not an integer!')
+                    self.state = 1 if self.state == 0 else 3
                     break
                 else:
                     raise ValueError
@@ -192,6 +192,7 @@ class Game:
 
         # reset the pot size
         self.pot_size = 0
+        self.state = 4
     
     def check_busted(self):
         # make sure no players busted
@@ -205,6 +206,7 @@ class Game:
                     break
                 else:
                     print(f'{action} is not a valid command! please try again.')
+            self.reset('full')
         # reset state no matter the outcome
         self.reset()
 
@@ -222,15 +224,16 @@ class Game:
         wager = input('wager: ')
         self.player.bet(int(wager))
     
-    def reset(self):
+    def reset(self, type=None):
         # game state
         self.state = 0
 
         # reset players stuff
         self.player.hand.reset_hand()
         self.cpu.hand.reset_hand()
-        self.player.stack = self.starting_stack
-        self.cpu.stack = self.starting_stack
+        if type == 'full':
+            self.player.stack = self.starting_stack
+            self.cpu.stack = self.starting_stack
     
         # reset deck
         self.deck.reload()
@@ -238,9 +241,16 @@ class Game:
     def round(self):
         self.deal_cards()
         self.betting_round()
-        self.discard_choice()
-        # level 0 cpu should randomly discard
-        self.betting_round()
-        self.payout()
-        self.check_busted()
+        if self.state > 0: # folding will trigger state to be 0
+            self.discard_choice()
+            # level 0 cpu should randomly discard
+            self.betting_round() # folding will trigger state to be 0
+            if self.state > 0:
+                self.payout()
+                self.check_busted()
+            else:
+                return
+        else:
+            return
+
 
