@@ -193,7 +193,7 @@ class Game:
         # reset the pot size
         self.pot_size = 0
     
-    def check_state(self):
+    def check_busted(self):
         # make sure no players busted
         if self.player.stack == 0 or self.cpu.stack == 0:
             while True:
@@ -225,7 +225,7 @@ class Game:
     def reset(self):
         # game state
         self.state = 0
-        
+
         # reset players stuff
         self.player.hand.reset_hand()
         self.cpu.hand.reset_hand()
@@ -242,5 +242,5 @@ class Game:
         # level 0 cpu should randomly discard
         self.betting_round()
         self.payout()
-        self.check_state()
+        self.check_busted()
 
