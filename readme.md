@@ -22,3 +22,6 @@ Please make sure to update the tests as well.
 
 ## README Format
 Format was taken from [Readme Example](https://www.makeareadme.com/)
+
+## Copyright
+Copyright © 2020, Ed Luong, All rights reserved.
