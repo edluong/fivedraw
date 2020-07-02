@@ -12,13 +12,13 @@ class TestGame(unittest.TestCase):
     def test_init_load_correctly(self):
         # testing init loaded up correctly        
         self.assertEqual(self.game.starting_stack, 100)
-        self.assertEqual(self.game.turn_state, 1)
+        self.assertEqual(self.game.state, 0)
         self.assertEqual(self.game.pot_size, 0)
 
         # check cpu and player obj
         self.assertEqual(self.game.player.stack, 100)
         self.assertEqual(self.game.cpu.stack, 100)
-          
+
     def test_deal_cards(self):
         pass
 
@@ -66,7 +66,5 @@ class TestGame(unittest.TestCase):
     def test_reset_game(self):
         self.game.reset_game()
         self.assertEqual(0, self.game.pot_size)
-        self.assertEqual('predeal', self.game.current_turn_state())
-
     if __name__ == '__main__':
         unittest.main()

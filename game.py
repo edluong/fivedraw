@@ -11,12 +11,12 @@ class CardNumberDoesNotExistError(Exception):
     '''Card Number is Not Between 1 to 5! '''
 
 class Game:
-
     states = {
-            1: 'predeal',
-            2: 'deal',
-            3: 'draw',
-            5: 'showdown'
+            0: 'setup', # when players don't have cards
+            1: 'betround1', # first betting round when player have cards 
+            2: 'draw', # discard/drawing phase
+            3: 'betround2', # second betting round
+            4: 'showdown' # find winner
     }
   
     def _draw_hand(self, hand, deck, numCards = 5):
@@ -66,11 +66,11 @@ class Game:
         self._display(self.player)
         self._display(self.cpu, 'c')
             
-    def __init__(self, starting_stack, turn_state = 1, pot_size = 0):
+    def __init__(self, starting_stack, state = 0, pot_size = 0):
         
         # initial game values
         self.starting_stack = starting_stack
-        self.turn_state = turn_state
+        self.state = state
         self.pot_size = pot_size
 
         # initialize players
@@ -128,7 +128,7 @@ class Game:
                     sys.exit(0)
                 elif action == 'fold':
                     # cpu wins the pot
-                    # TODO - needs to get the blinds
+                    # TODO - needs to get the blinds working
                     self.cpu.winpot(self.pot_size)
                     print(f'CPU wins {self.pot_size}')
                     break
@@ -207,10 +207,6 @@ class Game:
                     print(f'{action} is not a valid command! please try again.')
         # reset state no matter the outcome
         self.reset()
-   
-  
-    def current_turn_state(self):
-        return self.states.get(self.turn_state)
 
     def add_pot_size(self, new_amt):
         self.pot_size += new_amt
@@ -220,19 +216,22 @@ class Game:
 
     def reset_game(self):
         self.reset_pot_size()
-        self.turn_state = 1
+        self.state = 1
 
     def get_players_bet(self):
         wager = input('wager: ')
         self.player.bet(int(wager))
     
     def reset(self):
+        # game state
+        self.state = 0
+        
         # reset players stuff
         self.player.hand.reset_hand()
         self.cpu.hand.reset_hand()
         self.player.stack = self.starting_stack
         self.cpu.stack = self.starting_stack
-
+    
         # reset deck
         self.deck.reload()
     
