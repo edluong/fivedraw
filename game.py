@@ -5,6 +5,8 @@ from deck import Deck
 from player import Player
 from pokerengine import hand_rank, winninghand
 
+QUIT_COMMANDS = ['quit','q']
+
 class CardNumberDoesNotExistError(Exception):
     '''Card Number is Not Between 1 to 5! '''
 
@@ -79,8 +81,8 @@ class Game:
         self.deck = Deck()
         self.deck.shuffle()
 
-        # deal the cards
-        self.deal_cards()
+        # # deal the cards
+        # self.deal_cards()
 
     def discard_choices_input(self):
         return input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
@@ -90,7 +92,7 @@ class Game:
         while True:
             try:
                 discard_choices = self.discard_choices_input()
-                if 'quit' in discard_choices:
+                if  discard_choices in QUIT_COMMANDS:
                     sys.exit(0)
 
                 for _choice in discard_choices.split(' '):
@@ -122,7 +124,9 @@ class Game:
         while True:
             action = input('>>> ')
             try:
-                if action == 'fold':
+                if action in QUIT_COMMANDS:
+                    sys.exit(0)
+                elif action == 'fold':
                     # cpu wins the pot
                     # TODO - needs to get the blinds
                     self.cpu.winpot(self.pot_size)
@@ -184,11 +188,26 @@ class Game:
         print(f'{_win_player_text} wins with {_win_desc}!')
         print(f'{_win_player_text} wins {self.pot_size} from the pot')
         print(f'Player Stack Size: {self.player.stack}')
-        print(f'CPU Stack Size: {self.cpu.stack}')
-
+        print(f'CPU Stack Size: {self.cpu.stack}\n')
 
         # reset the pot size
         self.pot_size = 0
+    
+    def check_state(self):
+        # make sure no players busted
+        if self.player.stack == 0 or self.cpu.stack == 0:
+            while True:
+                print('game over.')
+                action = input('>>> ')
+                if action in QUIT_COMMANDS:
+                    sys.exit(0)
+                elif action in {'restart','r'}:
+                    break
+                else:
+                    print(f'{action} is not a valid command! please try again.')
+        # reset state no matter the outcome
+        self.reset()
+   
   
     def current_turn_state(self):
         return self.states.get(self.turn_state)
@@ -208,6 +227,12 @@ class Game:
         self.player.bet(int(wager))
     
     def reset(self):
-        self.deck.reload()
+        # reset players stuff
         self.player.hand.reset_hand()
         self.cpu.hand.reset_hand()
+        self.player.stack = self.starting_stack
+        self.cpu.stack = self.starting_stack
+
+        # reset deck
+        self.deck.reload()
+

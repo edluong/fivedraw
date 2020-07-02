@@ -18,13 +18,9 @@ class TestGame(unittest.TestCase):
         # check cpu and player obj
         self.assertEqual(self.game.player.stack, 100)
         self.assertEqual(self.game.cpu.stack, 100)
-        
-        # testing deal_cards()
-        # card amounts are good for cpu and player
-        self.assertEqual(self.game.player.hand.hand_size(), 5)
-        self.assertEqual(self.game.cpu.hand.hand_size(), 5)
-        # card amounts is correct in the deck, 10 cards are passed out
-        self.assertEqual(self.game.deck.deck_size(), 42)
+          
+    def test_deal_cards(self):
+        pass
 
     @patch('game.Game.discard_choices_input', return_value ='1 2 3')
     def test_discard_choices_validate(self, m_input):
