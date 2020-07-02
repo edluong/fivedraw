@@ -11,12 +11,13 @@ if __name__ == "__main__":
             print('Welcome to fivedraw!')
         print(f'Hand Number #{HAND_NUM_COUNTER}')
 
-        game.deal_cards()
-        game.betting_round()
-        game.discard_choice()
-        # level 0 cpu should randomly discard
-        game.betting_round()
-        game.payout()
-        game.check_state()
+        game.round()
+        # game.deal_cards()
+        # game.betting_round()
+        # game.discard_choice()
+        # # level 0 cpu should randomly discard
+        # game.betting_round()
+        # game.payout()
+        # game.check_state()
 
         HAND_NUM_COUNTER += 1

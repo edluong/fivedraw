@@ -235,4 +235,13 @@ class Game:
 
         # reset deck
         self.deck.reload()
+    
+    def round(self):
+        self.deal_cards()
+        self.betting_round()
+        self.discard_choice()
+        # level 0 cpu should randomly discard
+        self.betting_round()
+        self.payout()
+        self.check_state()
 
