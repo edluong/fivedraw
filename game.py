@@ -140,6 +140,8 @@ class Game:
 
                             self.player.bet(bet)
                             print(f'Player bets {bet}.')
+                            # pot should increase by the amount of the bet of the player
+                            self.pot_size += bet
 
                             self.cpu.cpu_decision(action, bet)
                             print(f'CPU bets {bet}.')
@@ -180,7 +182,10 @@ class Game:
                 self.cpu.stack += self.pot_size
                 
         print(f'{_win_player_text} wins with {_win_desc}!')
-        print(f'{_win_player_text} wins {self.pot_size}')
+        print(f'{_win_player_text} wins {self.pot_size} from the pot')
+        print(f'Player Stack Size: {self.player.stack}')
+        print(f'CPU Stack Size: {self.cpu.stack}')
+
 
         # reset the pot size
         self.pot_size = 0
