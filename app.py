@@ -4,7 +4,9 @@ if __name__ == "__main__":
     # set up
     STARTING_STACK = 200 # 1/2 blinds
     game = Game(STARTING_STACK)
+    game.betting_round()
     game.discard_choice()
+    game.betting_round()
 
     while True:
         answer = input('Type "d" to draw; "q" to quit: ')

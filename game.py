@@ -117,19 +117,40 @@ class Game:
         self._draw_hand(self.player.hand, self.deck, len(_choices))
         self._display(self.player) # display the cards to the player
     
-    def betting_round(self, player):
-        try:
-            action = input('Bet(b) Check(c) Fold(f): ').lower()
-            if action == 'f':
-                self.payout([self.cpu])
-            elif action == 'c':
-                self.cpu.cpu_decision()
-            elif action == 'b':
-                bet_amount = input('bet amount: ')
-                self.game.add_pot_size(self.player.bet(bet_amount))
-                print(f'You bet: {bet_amount}')
-        except:
-            raise Exception('There seems to be a problem...')
+    def betting_round(self):
+        while True:
+            action = input('>>> ')
+            try:
+                if action == 'fold':
+                    # cpu wins the pot
+                    # TODO - needs to get the blinds
+                    self.cpu.winpot(self.pot_size)
+                    print(f'CPU wins {self.pot_size}')
+                    break
+                elif action == 'check':
+                    no_bet = 0
+                    self.cpu.cpu_decision(action, no_bet) 
+                    break
+                elif action == 'bet':
+                    while True:
+                        bet_amount = input('Bet >>> ')
+                        try:
+                            bet = int(bet_amount)
+                            
+                            self.player.bet(bet)
+                            print(f'Player bets {bet}.')
+
+                            self.cpu.cpu_decision(action, bet)
+                            print(f'CPU bets {bet}.')
+                            break
+                        except ValueError:
+                            print(f'{bet_amount} was not an integer!')
+                    break
+                else:
+                    raise ValueError
+            except ValueError as e:
+                print(f'{action} was not a valid command! Try again.')
+                print(f'type help() for a list of commands')
             
     def payout(self, players):
         '''
