@@ -9,7 +9,5 @@ class CPU(Player):
             player: bets -> cpu call
             cpu first to act -> always check
         '''
-
-        if player_action == 'bet':
-            return self.bet(player_bet_amt)
+        return self.bet(player_bet_amt)
         

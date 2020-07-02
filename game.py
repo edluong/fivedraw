@@ -116,6 +116,7 @@ class Game:
         # re-draw hand
         self._draw_hand(self.player.hand, self.deck, len(_choices))
         self._display(self.player) # display the cards to the player
+        self._display(self.cpu, 'c')
     
     def betting_round(self):
         while True:
@@ -136,12 +137,15 @@ class Game:
                         bet_amount = input('Bet >>> ')
                         try:
                             bet = int(bet_amount)
-                            
+
                             self.player.bet(bet)
                             print(f'Player bets {bet}.')
 
                             self.cpu.cpu_decision(action, bet)
                             print(f'CPU bets {bet}.')
+
+                            # pot should increase by the amount of the bet
+                            self.pot_size += bet
                             break
                         except ValueError:
                             print(f'{bet_amount} was not an integer!')
@@ -152,22 +156,32 @@ class Game:
                 print(f'{action} was not a valid command! Try again.')
                 print(f'type help() for a list of commands')
             
-    def payout(self, players):
+    def payout(self):
         '''
             finds the winner
             pay the winner with the pot
             set the pot to 0
-            
-            Parameters: List[Players]
-            
-            Returns: void
         '''
-        payout_amount = self.pot_size / len(players)
+        _winner, _win_desc = winninghand([self.cpu, self.player])
 
-        # pay all the winners
-        for player in players:
-            player.winpot(payout_amount)
-        
+        if isinstance(_winner, list):
+            _num_of_winner = len(_winner)
+            payout_amount = self.pot_size / _num_of_winners
+            _winner_msg = 'Player and CPU tied.'
+
+            for _w in _winner:
+                _w.winpot(payout_amount)
+        else:
+            if _winner.hand == self.player.hand:
+                _win_player_text = 'Player'  
+                self.player.stack += self.pot_size
+            else: 
+                _win_player_text = 'CPU'
+                self.cpu.stack += self.pot_size
+                
+        print(f'{_win_player_text} wins with {_win_desc}!')
+        print(f'{_win_player_text} wins {self.pot_size}')
+
         # reset the pot size
         self.pot_size = 0
   

@@ -7,6 +7,7 @@ if __name__ == "__main__":
     game.betting_round()
     game.discard_choice()
     game.betting_round()
+    game.payout()
 
     while True:
         answer = input('Type "d" to draw; "q" to quit: ')
@@ -16,7 +17,10 @@ if __name__ == "__main__":
             game.deal_cards()
             
             # load up the hands again 
+            game.betting_round()
             game.discard_choice()
+            game.betting_round()
+            game.payout()
 
         elif answer.lower() == 'q':
             break
