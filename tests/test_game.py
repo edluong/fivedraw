@@ -1,6 +1,6 @@
 import sys
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, call
 
 from game import Game, CardNumberDoesNotExistError
 
@@ -82,9 +82,17 @@ class TestGame(unittest.TestCase):
 
     def test_payout(self):
         pass 
-
-    def test_check_busted(self):
-        pass
+    
+    @patch('builtins.input')
+    @patch('game.Game.reset')
+    def test_check_busted_restart(self, m_reset, m_input):
+        m_input.return_value = 'restart'
+        # set up
+        self.game.player.stack = 0
+        self.game.check_busted()
+        # tests
+        m_reset.assert_called_once()
+        m_reset.assert_called_with('full')
     
 
     @patch('deck.Deck.reload')
@@ -93,7 +101,7 @@ class TestGame(unittest.TestCase):
         self.game.state = 4
         self.game.player.stack = 300
         self.game.cpu.stack = 50
-        self.game.player.hand.hand = [(14,'Clubs')]
+        self.game.player.hand.hand = [(14,'Clubs')] # could list all cards, but only wanted to check empty
         self.game.cpu.hand.hand = [(13,'Clubs')]
         
         self.game.reset('full')

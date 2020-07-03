@@ -203,12 +203,12 @@ class Game:
                 if action in QUIT_COMMANDS:
                     sys.exit(0)
                 elif action in {'restart','r'}:
+                    self.reset('full')
                     break
                 else:
                     print(f'{action} is not a valid command! please try again.')
-            self.reset('full')
-        # reset state no matter the outcome
-        self.reset()
+        else:
+            self.reset()
 
     def add_pot_size(self, new_amt):
         self.pot_size += new_amt
