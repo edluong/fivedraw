@@ -96,6 +96,8 @@ class TestGame(unittest.TestCase):
         print(p1.stack_size)
         self.assertEqual(self.game.player.stack, 150)
         self.assertEqual(self.game.cpu.stack, 150)
+        self.assertEqual(self.game.pot_size, 0)
+        self.assertEqual(self.game.state, 4)
     
     @patch('game.winninghand')
     def test_payout_player(self, mocked_winninghand):
@@ -109,6 +111,8 @@ class TestGame(unittest.TestCase):
 
         self.assertEqual(self.game.player.stack, 200)
         self.assertEqual(self.game.cpu.stack, 100)
+        self.assertEqual(self.game.pot_size, 0)
+        self.assertEqual(self.game.state, 4)
     
     @patch('game.winninghand')
     def test_payout_cpu(self, mocked_winninghand):
@@ -122,6 +126,8 @@ class TestGame(unittest.TestCase):
 
         self.assertEqual(self.game.player.stack, 100)
         self.assertEqual(self.game.cpu.stack, 200)
+        self.assertEqual(self.game.pot_size, 0)
+        self.assertEqual(self.game.state, 4)
     
     @patch('game.sys.exit',side_effect = SystemExit)
     @patch('builtins.input', return_value='q')
