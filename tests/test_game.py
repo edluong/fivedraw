@@ -20,7 +20,15 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.cpu.stack, 100)
 
     def test_deal_cards(self):
-        pass
+
+        self.game.deal_cards()
+
+        # make sure 10 cards are missing from deck
+        self.assertEqual(self.game.deck.deck_size(), 42)
+
+        # player and cpu has five cards
+        self.assertEqual(self.game.cpu.hand.hand_size(), 5)
+        self.assertEqual(self.game.player.hand.hand_size(), 5)
 
     @patch('game.Game.discard_choices_input', return_value ='1 2 3')
     def test_discard_choices_validate(self, m_input):
@@ -67,6 +75,18 @@ class TestGame(unittest.TestCase):
     def test_discard_choices_validate_cardnumberDNE_error(self, mocked_input, mocked_print):
         with self.assertRaises(CardNumberDoesNotExistError):
             self.game.discard_choices_validate()
+    
+    def test_betting_round(self):
+        pass
+
+    def payout(self):
+        pass 
+
+    def check_busted(self):
+        pass
+
+    def check_reset(self):
+        pass
 
     def test_add_pot_size(self):
         self.game.add_pot_size(10)
