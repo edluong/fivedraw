@@ -83,16 +83,42 @@ class TestGame(unittest.TestCase):
     def test_payout(self):
         pass 
     
-    @patch('builtins.input')
+    
+    @patch('game.sys.exit',side_effect = SystemExit)
+    @patch('builtins.input', return_value='q')
+    def test_check_busted_quit(self, m_exit, m_input):
+        '''
+            higher the patch, the variable is on the right
+            example: patch(input) -> m_input
+        '''
+        self.game.player.stack = 0
+        self.game.cpu.stack = 400
+
+        # tests
+        with self.assertRaises(SystemExit):
+            self.game.check_busted()
+
+    
     @patch('game.Game.reset')
-    def test_check_busted_restart(self, m_reset, m_input):
-        m_input.return_value = 'restart'
+    @patch('builtins.input', return_value='restart')
+    def test_check_busted_restart(self, m_input, m_reset):
         # set up
         self.game.player.stack = 0
+        self.game.cpu.stack = 400
         self.game.check_busted()
         # tests
         m_reset.assert_called_once()
         m_reset.assert_called_with('full')
+        
+    @patch('game.Game.reset')
+    def test_check_busted_stacks_not_zero(self, m_reset):
+        # set up
+        self.game.player.stack = 100
+        self.game.cpu.stack = 300
+        self.game.check_busted()
+        # tests
+        m_reset.assert_called_once()
+        m_reset.assert_called_with()
     
 
     @patch('deck.Deck.reload')
