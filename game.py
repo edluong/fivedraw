@@ -126,7 +126,7 @@ class Game:
                 elif action == 'fold':
                     # cpu wins the pot
                     # TODO - needs to get the blinds working
-                    self.cpu.winpot(self.pot_size)
+                    self.cpu.stack += self.pot_size
                     print(f'CPU wins {self.pot_size}\n')
                     self.reset() # soft reset
                     break

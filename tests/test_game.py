@@ -26,9 +26,7 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.cpu.stack, 100)
 
     def test_deal_cards(self):
-
         self.game.deal_cards()
-
         # make sure 10 cards are missing from deck
         self.assertEqual(self.game.deck.deck_size(), 42)
         # player and cpu has five cards
@@ -81,7 +79,24 @@ class TestGame(unittest.TestCase):
         with self.assertRaises(CardNumberDoesNotExistError):
             self.game.discard_choices_validate()
     
-    def test_betting_round(self):
+    @patch('game.sys.exit',side_effect = SystemExit)
+    @patch('builtins.input', return_value='quit')
+    def test_betting_round(self, m_input, m_exit):
+        with self.assertRaises(SystemExit):
+            self.game.betting_round()
+    
+    @patch('builtins.input', return_value='test', side_effect= ValueError)
+    def test_betting_round_invalid_input(self, m_input):
+        with self.assertRaises(ValueError):
+            self.game.betting_round()
+    
+    def test_betting_round_check(self, m_input):
+        pass
+    
+    def test_betting_round_fold(self, m_input):
+        pass
+    
+    def test_betting_round_invalid_bet(self, m_input):
         pass
 
     @patch('game.winninghand')
@@ -167,7 +182,7 @@ class TestGame(unittest.TestCase):
     
 
     @patch('deck.Deck.reload')
-    def test_check_reset_full(self, m_deck):
+    def test_reset_full(self, m_deck):
         # setup
         self.game.state = 4
         self.game.player.stack = 300
