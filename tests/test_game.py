@@ -61,7 +61,7 @@ class TestGame(unittest.TestCase):
     # inspiration: https://stackoverflow.com/a/61941348/4376173
     @patch('builtins.input', return_value = 'test')
     @patch('builtins.print', side_effect = ValueError('Integer was not entered in!'))
-    def test_discard_choices_validate_value_error(self, mocked_input, mocked_print):
+    def test_discard_choices_validate_value_error(self, mocked_print, mocked_input):
         '''
             Need to mock the input and type in "test"
             this would then create a side effect in print where ValueError is raised
@@ -73,7 +73,7 @@ class TestGame(unittest.TestCase):
     # inspiration: https://stackoverflow.com/a/61941348/4376173
     @patch('builtins.input', return_value='123')
     @patch('builtins.print', side_effect = CardNumberDoesNotExistError("Card Number doesn't exist! Values must be between 1 through 5!"))
-    def test_discard_choices_validate_cardnumberDNE_error(self, mocked_input, mocked_print):
+    def test_discard_choices_validate_cardnumberDNE_error(self, mocked_print, mocked_input):
         with self.assertRaises(CardNumberDoesNotExistError):
             self.game.discard_choices_validate()
     
@@ -86,7 +86,7 @@ class TestGame(unittest.TestCase):
     
     @patch('game.sys.exit',side_effect = SystemExit)
     @patch('builtins.input', return_value='q')
-    def test_check_busted_quit(self, m_exit, m_input):
+    def test_check_busted_quit(self, m_input, m_exit):
         '''
             higher the patch, the variable is on the right
             example: patch(input) -> m_input
