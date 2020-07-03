@@ -183,17 +183,12 @@ class Game:
             if _winner.hand.hand == self.player.hand:
                 _win_player_text = 'Player'  
                 self.player.stack += self.pot_size
-            elif _winner.hand == self.cpu.hand: 
+            elif _winner.hand.hand == self.cpu.hand: 
                 _win_player_text = 'CPU'
                 self.cpu.stack += self.pot_size
             else:
                 print('there is something wrong...')
-                print('dump all vars')
-                print(_winner.hand)
-                print(_winner)
-                print(type(_winner))
-                print(self.player.hand)
-                
+
         print(f'{_win_player_text} wins with {_win_desc}!')
         print(f'{_win_player_text} wins {self.pot_size} from the pot')
         print(f'Player Stack Size: {self.player.stack}')

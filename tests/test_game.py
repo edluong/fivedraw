@@ -109,9 +109,19 @@ class TestGame(unittest.TestCase):
 
         self.assertEqual(self.game.player.stack, 200)
         self.assertEqual(self.game.cpu.stack, 100)
+    
+    @patch('game.winninghand')
+    def test_payout_cpu(self, mocked_winninghand):
+        # set up
+        self.game.pot_size = 100
+        p1 = self.players.get('trips')
+        self.game.cpu.set_hand(hands.get('trips'))
+        mocked_winninghand.return_value = (p1, 'trips')
 
-    def test_payout_cpu(self):
-        pass 
+        self.game.payout()
+
+        self.assertEqual(self.game.player.stack, 100)
+        self.assertEqual(self.game.cpu.stack, 200)
     
     @patch('game.sys.exit',side_effect = SystemExit)
     @patch('builtins.input', return_value='q')
