@@ -6,8 +6,10 @@ from game import Game, CardNumberDoesNotExistError
 
 class TestGame(unittest.TestCase):
     
+    
     def setUp(self):
-        self.game = Game(100) # starting stack
+        STARTING_STACK = 100
+        self.game = Game(STARTING_STACK) # starting stack
     
     def test_init_load_correctly(self):
         # testing init loaded up correctly        
@@ -25,7 +27,6 @@ class TestGame(unittest.TestCase):
 
         # make sure 10 cards are missing from deck
         self.assertEqual(self.game.deck.deck_size(), 42)
-
         # player and cpu has five cards
         self.assertEqual(self.game.cpu.hand.hand_size(), 5)
         self.assertEqual(self.game.player.hand.hand_size(), 5)
@@ -79,14 +80,47 @@ class TestGame(unittest.TestCase):
     def test_betting_round(self):
         pass
 
-    def payout(self):
+    def test_payout(self):
         pass 
 
-    def check_busted(self):
+    def test_check_busted(self):
         pass
+    
 
-    def check_reset(self):
-        pass
+    @patch('deck.Deck.reload')
+    def test_check_reset_full(self, m_deck):
+        # setup
+        self.game.state = 4
+        self.game.player.stack = 300
+        self.game.cpu.stack = 50
+        self.game.player.hand.hand = [(14,'Clubs')]
+        self.game.cpu.hand.hand = [(13,'Clubs')]
+        
+        self.game.reset('full')
+
+        # tests
+        self.assertEqual(self.game.state, 0)
+        self.assertEqual(self.game.player.stack, 100)
+        self.assertEqual(self.game.cpu.stack, 100)
+        self.assertEqual(self.game.player.hand.hand, [])
+        self.assertEqual(self.game.cpu.hand.hand, [])
+        m_deck.assert_called_once()
+    
+    @patch('deck.Deck.reload')
+    def test_check_reset(self, m_deck):
+        # setup
+        self.game.state = 4
+        self.game.player.hand.hand = [(14,'Clubs')]
+        self.game.cpu.hand.hand = [(13,'Clubs')]
+        
+        self.game.reset()
+
+        # tests
+        self.assertEqual(self.game.state, 0)
+        self.assertEqual(self.game.player.hand.hand, [])
+        self.assertEqual(self.game.cpu.hand.hand, [])
+        m_deck.assert_called_once()
+        
 
     def test_add_pot_size(self):
         self.game.add_pot_size(10)
