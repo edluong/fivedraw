@@ -168,22 +168,31 @@ class Game:
             pay the winner with the pot
             set the pot to 0
         '''
+        _win_player_text = ''
         _winner, _win_desc = winninghand([self.cpu, self.player])
 
         if isinstance(_winner, list):
             _num_of_winner = len(_winner)
-            payout_amount = self.pot_size / _num_of_winners
-            _winner_msg = 'Player and CPU tied.'
+            split_pot = self.pot_size / _num_of_winner
+            _win_player_text = 'Player and CPU tied.'
 
-            for _w in _winner:
-                _w.winpot(payout_amount)
+            # TODO - need to make this more generalized for more than two players
+            self.player.stack += split_pot
+            self.cpu.stack += split_pot
         else:
-            if _winner.hand == self.player.hand:
+            if _winner.hand.hand == self.player.hand:
                 _win_player_text = 'Player'  
                 self.player.stack += self.pot_size
-            else: 
+            elif _winner.hand == self.cpu.hand: 
                 _win_player_text = 'CPU'
                 self.cpu.stack += self.pot_size
+            else:
+                print('there is something wrong...')
+                print('dump all vars')
+                print(_winner.hand)
+                print(_winner)
+                print(type(_winner))
+                print(self.player.hand)
                 
         print(f'{_win_player_text} wins with {_win_desc}!')
         print(f'{_win_player_text} wins {self.pot_size} from the pot')

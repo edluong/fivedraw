@@ -3,6 +3,9 @@ import unittest
 from unittest.mock import patch, call
 
 from game import Game, CardNumberDoesNotExistError
+from player import Player
+from cpu import CPU
+from tests.test_hand_constants import hands, make_player_dict
 
 class TestGame(unittest.TestCase):
     
@@ -10,6 +13,7 @@ class TestGame(unittest.TestCase):
     def setUp(self):
         STARTING_STACK = 100
         self.game = Game(STARTING_STACK) # starting stack
+        self.players = make_player_dict(hands, STARTING_STACK)
     
     def test_init_load_correctly(self):
         # testing init loaded up correctly        
@@ -80,9 +84,34 @@ class TestGame(unittest.TestCase):
     def test_betting_round(self):
         pass
 
-    def test_payout(self):
-        pass 
+    @patch('game.winninghand')
+    def test_payout_two_winners(self, mocked_winners):
+        # set up
+        self.game.pot_size = 100
+        p1 = self.players.get('tied_hand_two_pair')
+        p2 = self.players.get('tied_hand_two_pair_two')
+        mocked_winners.return_value = ([p1, p2], 'two pair')
+
+        self.game.payout()
+        print(p1.stack_size)
+        self.assertEqual(self.game.player.stack, 150)
+        self.assertEqual(self.game.cpu.stack, 150)
     
+    @patch('game.winninghand')
+    def test_payout_player(self, mocked_winninghand):
+        # set up
+        self.game.pot_size = 100
+        p1 = self.players.get('trips')
+        self.game.player.set_hand(hands.get('trips'))
+        mocked_winninghand.return_value = (p1, 'trips')
+
+        self.game.payout()
+
+        self.assertEqual(self.game.player.stack, 200)
+        self.assertEqual(self.game.cpu.stack, 100)
+
+    def test_payout_cpu(self):
+        pass 
     
     @patch('game.sys.exit',side_effect = SystemExit)
     @patch('builtins.input', return_value='q')
