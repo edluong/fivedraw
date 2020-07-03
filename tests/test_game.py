@@ -90,14 +90,35 @@ class TestGame(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.game.betting_round()
     
-    def test_betting_round_check(self, m_input):
-        pass
+    @patch('builtins.input', return_value='check')
+    @patch('cpu.CPU.cpu_decision')
+    def test_betting_round_check(self, m_cpu_decision, m_input):
+        self.game.state = 0
+        self.game.betting_round()
+        m_cpu_decision.assert_called_once()
+        m_cpu_decision.assert_called_with('check', 0)
+        self.assertEqual(self.game.state, 1)
+        
+    @patch('builtins.input', return_value='fold')
+    @patch('game.Game.reset')
+    def test_betting_round_fold(self, m_reset, m_input):
+        self.game.pot_size = 10
+        self.game.betting_round()
+        self.assertEqual(self.game.cpu.stack, 110)
+        m_reset.assert_called_once()
     
-    def test_betting_round_fold(self, m_input):
-        pass
-    
-    def test_betting_round_invalid_bet(self, m_input):
-        pass
+    # example of multiple inputs 
+    # https://stackoverflow.com/a/56498519/4376173
+    @patch('builtins.input', side_effect=['bet', '10'])
+    @patch('cpu.CPU.cpu_decision')
+    def test_betting_round_bet(self, m_cpu_decision, m_input):
+        self.game.betting_round()
+        self.assertEqual(self.game.player.stack, 90) # starting stack of 100 - bet of 10
+        m_cpu_decision.assert_called_once()
+        m_cpu_decision.assert_called_with('bet', 10)
+        self.assertEqual(self.game.pot_size, 20) # level 0 cpu will copy the bet
+        self.assertEqual(self.game.state, 1)
+
 
     @patch('game.winninghand')
     def test_payout_two_winners(self, mocked_winners):

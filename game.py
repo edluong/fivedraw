@@ -131,8 +131,7 @@ class Game:
                     self.reset() # soft reset
                     break
                 elif action == 'check':
-                    no_bet = 0
-                    self.cpu.cpu_decision(action, no_bet) 
+                    self.cpu.cpu_decision(action, 0) 
                     self.state = 1 if self.state == 0 else 3
                     break
                 elif action == 'bet':
@@ -148,7 +147,6 @@ class Game:
 
                             self.cpu.cpu_decision(action, bet)
                             print(f'CPU bets {bet}.')
-
                             # pot should increase by the amount of the bet
                             self.pot_size += bet
                             break
