@@ -92,7 +92,7 @@ class Game:
                 if  discard_choices in QUIT_COMMANDS:
                     sys.exit(0)
 
-                for _choice in discard_choices.split(' '):
+                for _choice in discard_choices.strip().split(' '):
                     if _choice.lower() == 'k':
                         break
                     elif int(_choice) < 0 or int(_choice) > 5 :

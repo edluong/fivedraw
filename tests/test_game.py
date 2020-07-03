@@ -31,6 +31,15 @@ class TestGame(unittest.TestCase):
         result = self.game.discard_choices_validate()
         self.assertEqual(result, [1, 2, 3])
     
+    @patch('game.Game.discard_choices_input', return_value =' 1 2 3 ')
+    def test_discard_choices_validate_spaces_before_and_after(self, m_input):
+        '''
+            mock discard_choices_input to return 1 2 3 (with spaces before and after)
+            expecting the result to equal the array [1,2,3]
+        '''
+        result = self.game.discard_choices_validate()
+        self.assertEqual(result, [1, 2, 3])
+    
     @patch('game.Game.discard_choices_input', return_value ='5 1')
     def test_discard_choices_validate_2(self, m_input):
         '''
