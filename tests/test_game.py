@@ -90,7 +90,7 @@ class TestGame(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.game.betting_round()
     
-    @patch('builtins.input', return_value='check')
+    @patch('builtins.input', return_value='check', autospec=True)
     @patch('cpu.CPU.cpu_decision')
     def test_betting_round_check(self, m_cpu_decision, m_input):
         self.game.state = 0

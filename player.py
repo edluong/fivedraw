@@ -10,6 +10,9 @@ class Player:
         self.stack = stack
         self.isDealer = isDealer
     
+    def __eq__(self, other):
+        return self.hand == other.hand
+
     def bet(self, amount):
         if amount > self.stack:
             raise CantOverBetError
