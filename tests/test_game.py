@@ -30,8 +30,8 @@ class TestGame(unittest.TestCase):
         # make sure 10 cards are missing from deck
         self.assertEqual(self.game.deck.deck_size(), 42)
         # player and cpu has five cards
-        self.assertEqual(self.game.cpu.hand.hand_size(), 5)
-        self.assertEqual(self.game.player.hand.hand_size(), 5)
+        self.assertEqual(len(self.game.cpu.hand), 5)
+        self.assertEqual(len(self.game.player.hand), 5)
 
     @patch('game.Game.discard_choices_input', return_value ='1 2 3')
     def test_discard_choices_validate(self, m_input):
@@ -208,8 +208,8 @@ class TestGame(unittest.TestCase):
         self.game.state = 4
         self.game.player.stack = 300
         self.game.cpu.stack = 50
-        self.game.player.hand.hand = [(14,'Clubs')] # could list all cards, but only wanted to check empty
-        self.game.cpu.hand.hand = [(13,'Clubs')]
+        self.game.player.hand = [(14,'Clubs')] # could list all cards, but only wanted to check empty
+        self.game.cpu.hand = [(13,'Clubs')]
         
         self.game.reset('full')
 
@@ -217,23 +217,23 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.state, 0)
         self.assertEqual(self.game.player.stack, 100)
         self.assertEqual(self.game.cpu.stack, 100)
-        self.assertEqual(self.game.player.hand.hand, [])
-        self.assertEqual(self.game.cpu.hand.hand, [])
+        self.assertEqual(self.game.player.hand, [])
+        self.assertEqual(self.game.cpu.hand, [])
         m_deck.assert_called_once()
     
     @patch('deck.Deck.reload')
     def test_check_reset(self, m_deck):
         # setup
         self.game.state = 4
-        self.game.player.hand.hand = [(14,'Clubs')]
-        self.game.cpu.hand.hand = [(13,'Clubs')]
+        self.game.player.hand = [(14,'Clubs')]
+        self.game.cpu.hand = [(13,'Clubs')]
         
         self.game.reset()
 
         # tests
         self.assertEqual(self.game.state, 0)
-        self.assertEqual(self.game.player.hand.hand, [])
-        self.assertEqual(self.game.cpu.hand.hand, [])
+        self.assertEqual(self.game.player.hand, [])
+        self.assertEqual(self.game.cpu.hand, [])
         m_deck.assert_called_once()
         
 

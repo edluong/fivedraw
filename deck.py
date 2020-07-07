@@ -1,4 +1,3 @@
-from card import Card
 from random import shuffle
 from constants import SUIT
 

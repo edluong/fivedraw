@@ -21,7 +21,7 @@ class Game:
   
     def _draw_hand(self, hand, deck, numCards = 5):
         for _ in range(numCards):
-            hand.add_card(deck.draw())
+            hand.append(deck.draw())
 
     def _display(self, player, playertype='p'):
         '''
@@ -46,10 +46,10 @@ class Game:
         # hand details
         _hand_msg = CPU_HAND if playertype == 'c' else PLAYER_HAND
         print(f'\n{_hand_msg}', end='\n')
-        player.hand.print_hand()
+        player.print_hand()
 
         # get the ranking of the hand
-        _rank = hand_rank(player.hand.hand)
+        _rank = hand_rank(player.hand)
         _result, _ = _rank
         _result_msg = CPU_RESULT if playertype == 'c' else PLAYER_RESULT
         print(f'{_result_msg} {_result}')
@@ -110,7 +110,7 @@ class Game:
         _choices = self.discard_choices_validate()
         
         if _choices:
-            self.player.hand.discard(_choices)
+            self.player.discard(_choices)
         
         # re-draw hand
         self._draw_hand(self.player.hand, self.deck, len(_choices))
@@ -178,10 +178,10 @@ class Game:
             self.player.stack += split_pot
             self.cpu.stack += split_pot
         else:
-            if _winner.hand.hand == self.player.hand:
+            if _winner.hand == self.player.hand:
                 _win_player_text = 'Player'  
                 self.player.stack += self.pot_size
-            elif _winner.hand.hand == self.cpu.hand: 
+            elif _winner.hand == self.cpu.hand: 
                 _win_player_text = 'CPU'
                 self.cpu.stack += self.pot_size
             else:
@@ -231,8 +231,8 @@ class Game:
         self.state = 0
 
         # reset players stuff
-        self.player.hand.reset_hand()
-        self.cpu.hand.reset_hand()
+        self.player.hand.clear()
+        self.cpu.hand.clear()
         if type == 'full':
             self.player.stack = self.starting_stack
             self.cpu.stack = self.starting_stack
