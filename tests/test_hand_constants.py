@@ -1,5 +1,4 @@
 # used for testing
-from hand import Hand
 from player import Player
 
 # test dict of hardcoded hand cases
@@ -58,9 +57,7 @@ def make_player_dict(hands, stack_size):
     players = {}
     for name, cards in hands.items():
         player = Player(stack_size)
-        hand = Hand()
-        hand.set_hand(cards)
-
-        player.set_hand(hand)
+        hand = []
+        player.hand = cards
         players.update({name: player})
     return players

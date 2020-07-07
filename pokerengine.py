@@ -30,8 +30,8 @@ def _straight_and_or_flush(rank_list, suit_list):
 
 def _same_rank_winning_hand(playerone, playertwo):
 
-    handone = playerone.hand.hand
-    handtwo = playertwo.hand.hand
+    handone = playerone.hand
+    handtwo = playertwo.hand
 
     # find the different cards from the both hands
     diff_one = set(handone).difference(set(handtwo))
@@ -116,7 +116,7 @@ def winninghand(players):
     for player in players:
 
         # get a ranking for the hand
-        handrank_tuple = hand_rank(player.hand.hand)
+        handrank_tuple = hand_rank(player.hand)
         
         # separate out the results
         desc, rank_strength = handrank_tuple
