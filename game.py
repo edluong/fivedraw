@@ -1,4 +1,5 @@
 import sys
+import random
 
 from cpu import CPU
 from deck import Deck
@@ -56,6 +57,12 @@ class Game:
 
         # get stack size
         print(f'Stack Size: {player.stack}')
+
+        # dealer status
+        if self.player.isDealer and playertype == 'p':
+            print('You are dealer.')
+        elif self.cpu.isDealer:
+            print('CPU is dealer.')
     
     def deal_cards(self):
         # deal the cards out the the players
@@ -64,7 +71,7 @@ class Game:
 
         # display the cards
         self._display(self.player)
-        self._display(self.cpu, 'c')
+        self._display(self.cpu, 'c') # TODO - remove when dealer functionality is in
             
     def __init__(self, starting_stack, state = 0, pot_size = 0):
         
@@ -80,6 +87,12 @@ class Game:
         # prepare the deck
         self.deck = Deck()
         self.deck.shuffle()
+
+        # pick dealer
+        players = [self.player, self.cpu]
+        dealer = random.choice(players)
+        dealer.isDealer = True
+
 
     def discard_choices_input(self):
         return input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
@@ -115,7 +128,7 @@ class Game:
         # re-draw hand
         self._draw_hand(self.player.hand, self.deck, len(_choices))
         self._display(self.player) # display the cards to the player
-        self._display(self.cpu, 'c')
+        self._display(self.cpu, 'c')  # TODO - remove when dealer functionality is in
     
     def betting_round(self):
         while True:
@@ -243,10 +256,12 @@ class Game:
     def round(self):
         self.deal_cards()
         self.betting_round()
+        # self.cpu.bet_strat()
         if self.state > 0: # folding will trigger state to be 0
             self.discard_choice()
-            # level 0 cpu should randomly discard
+            # self.cpu.discard_strat()
             self.betting_round() # folding will trigger state to be 0
+            # self.cpu.bet_strat()
             if self.state > 0:
                 self.payout()
                 self.check_busted()
