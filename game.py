@@ -63,6 +63,8 @@ class Game:
             print('You are dealer.')
         elif self.cpu.isDealer:
             print('CPU is dealer.')
+        
+        print(f'Pot Size {self.pot_size}')
     
     def deal_cards(self):
         # deal the cards out the the players
@@ -93,6 +95,19 @@ class Game:
         dealer = random.choice(players)
         dealer.isDealer = True
 
+    def pay_blinds(self):
+        big_blind = self.starting_stack // 100
+        small_blind = big_blind // 2
+
+        if self.player.isDealer == True:
+            self.player.bet(small_blind)
+            self.cpu.bet(big_blind)
+        else:
+            self.cpu.bet(small_blind)
+            self.player.bet(big_blind)
+
+        self.pot_size += small_blind
+        self.pot_size += big_blind
 
     def discard_choices_input(self):
         return input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
@@ -129,6 +144,7 @@ class Game:
         self._draw_hand(self.player.hand, self.deck, len(_choices))
         self._display(self.player) # display the cards to the player
         self._display(self.cpu, 'c')  # TODO - remove when dealer functionality is in
+
     
     def betting_round(self):
         while True:
@@ -179,35 +195,38 @@ class Game:
             pay the winner with the pot
             set the pot to 0
         '''
-        _win_player_text = ''
-        _winner, _win_desc = winninghand([self.cpu, self.player])
+        if self.state > 0:
+            _win_player_text = ''
+            _winner, _win_desc = winninghand([self.cpu, self.player])
 
-        if isinstance(_winner, list):
-            _num_of_winner = len(_winner)
-            split_pot = self.pot_size / _num_of_winner
-            _win_player_text = 'Player and CPU tied.'
+            if isinstance(_winner, list):
+                _num_of_winner = len(_winner)
+                split_pot = self.pot_size / _num_of_winner
+                _win_player_text = 'Player and CPU tied.'
 
-            # TODO - need to make this more generalized for more than two players
-            self.player.stack += split_pot
-            self.cpu.stack += split_pot
-        else:
-            if _winner.hand == self.player.hand:
-                _win_player_text = 'Player'  
-                self.player.stack += self.pot_size
-            elif _winner.hand == self.cpu.hand: 
-                _win_player_text = 'CPU'
-                self.cpu.stack += self.pot_size
+                # TODO - need to make this more generalized for more than two players
+                self.player.stack += split_pot
+                self.cpu.stack += split_pot
             else:
-                print('there is something wrong...')
+                if _winner.hand == self.player.hand:
+                    _win_player_text = 'Player'  
+                    self.player.stack += self.pot_size
+                elif _winner.hand == self.cpu.hand: 
+                    _win_player_text = 'CPU'
+                    self.cpu.stack += self.pot_size
+                else:
+                    print('there is something wrong...')
 
-        print(f'{_win_player_text} wins with {_win_desc}!')
-        print(f'{_win_player_text} wins {self.pot_size} from the pot')
-        print(f'Player Stack Size: {self.player.stack}')
-        print(f'CPU Stack Size: {self.cpu.stack}\n')
+            print(f'{_win_player_text} wins with {_win_desc}!')
+            print(f'{_win_player_text} wins {self.pot_size} from the pot')
+            print(f'Player Stack Size: {self.player.stack}')
+            print(f'CPU Stack Size: {self.cpu.stack}\n')
 
-        # reset the pot size
-        self.pot_size = 0
-        self.state = 4
+            # reset the pot size
+            self.pot_size = 0
+            self.state = 4
+        else:
+            return
     
     def check_busted(self):
         # make sure no players busted
@@ -242,6 +261,7 @@ class Game:
     def reset(self, type=None):
         # game state
         self.state = 0
+        self.pot_size = 0
 
         # reset players stuff
         self.player.hand.clear()
@@ -254,10 +274,11 @@ class Game:
         self.deck.reload()
     
     def round(self):
+        self.pay_blinds()
         self.deal_cards()
         self.betting_round()
         # self.cpu.bet_strat()
-        if self.state > 0: # folding will trigger state to be 0
+        if self.state > 0: 
             self.discard_choice()
             # self.cpu.discard_strat()
             self.betting_round() # folding will trigger state to be 0
@@ -269,5 +290,16 @@ class Game:
                 return
         else:
             return
+
+        # self.deal_cards()
+        # self.betting_round()
+        # # self.cpu.bet_strat()
+        # self.discard_choice()
+        # # self.cpu.discard_strat()
+        # self.betting_round() # folding will trigger state to be 0
+        #     # self.cpu.bet_strat()
+        # self.payout()
+        # self.check_busted()
+
 
 
