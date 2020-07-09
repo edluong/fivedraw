@@ -75,12 +75,15 @@ class Game:
         self._display(self.player)
         self._display(self.cpu, 'c') # TODO - remove when dealer functionality is in
             
-    def __init__(self, starting_stack, state = 0, pot_size = 0):
+    def __init__(self, starting_stack, current_bet = 0, state = 0, pot_size = 0):
         
         # initial game values
         self.starting_stack = starting_stack
+        self.big_blind = self.starting_stack // 100
+        self.small_blind = self.big_blind // 2
         self.state = state
         self.pot_size = pot_size
+        self.current_bet = current_bet
 
         # initialize players
         self.player = Player(self.starting_stack)
@@ -96,18 +99,19 @@ class Game:
         dealer.isDealer = True
 
     def pay_blinds(self):
-        big_blind = self.starting_stack // 100
-        small_blind = big_blind // 2
-
+        # dealer will pay small blind
+        # non-dealer pays big blind
         if self.player.isDealer == True:
-            self.player.bet(small_blind)
-            self.cpu.bet(big_blind)
+            self.player.bet(self.small_blind)
+            self.cpu.bet(self.big_blind)
         else:
-            self.cpu.bet(small_blind)
-            self.player.bet(big_blind)
+            self.cpu.bet(self.small_blind)
+            self.player.bet(self.big_blind)
 
-        self.pot_size += small_blind
-        self.pot_size += big_blind
+        self.pot_size += self.small_blind
+        self.pot_size += self.big_blind
+
+        self.current_bet = self.big_blind
 
     def discard_choices_input(self):
         return input('Which cards to discard? (Type the number, e.g.: 1 2 3) or k to keep: ')
@@ -144,8 +148,7 @@ class Game:
         self._draw_hand(self.player.hand, self.deck, len(_choices))
         self._display(self.player) # display the cards to the player
         self._display(self.cpu, 'c')  # TODO - remove when dealer functionality is in
-
-    
+  
     def betting_round(self):
         while True:
             action = input('>>> ')
@@ -160,7 +163,7 @@ class Game:
                     self.reset() # soft reset
                     break
                 elif action == 'check':
-                    self.cpu.cpu_decision(action, 0) 
+                    self.cpu.bet_strategy(0, action) 
                     self.state = 1 if self.state == 0 else 3
                     break
                 elif action == 'bet':
@@ -174,8 +177,8 @@ class Game:
                             # pot should increase by the amount of the bet of the player
                             self.pot_size += bet
 
-                            self.cpu.cpu_decision(action, bet)
-                            print(f'CPU bets {bet}.')
+                            self.cpu.bet_strategy(bet, action)
+                            print(f'CPU calls {bet}.')
                             # pot should increase by the amount of the bet
                             self.pot_size += bet
                             break
@@ -274,10 +277,22 @@ class Game:
         self.deck.reload()
     
     def round(self):
+
+        # always happens in this order
         self.pay_blinds()
         self.deal_cards()
-        self.betting_round()
-        # self.cpu.bet_strat()
+
+        if self.cpu.isDealer:
+            self.cpu.call(self.current_bet)
+            self.pot_size += self.cpu.last_bet
+            self._display(self.cpu, 'c')
+            
+            self.betting_round()
+        else:
+            self.betting_round()
+            self.cpu.bet_strategy()
+        
+
         if self.state > 0: 
             self.discard_choice()
             # self.cpu.discard_strat()
@@ -290,16 +305,3 @@ class Game:
                 return
         else:
             return
-
-        # self.deal_cards()
-        # self.betting_round()
-        # # self.cpu.bet_strat()
-        # self.discard_choice()
-        # # self.cpu.discard_strat()
-        # self.betting_round() # folding will trigger state to be 0
-        #     # self.cpu.bet_strat()
-        # self.payout()
-        # self.check_busted()
-
-
-
