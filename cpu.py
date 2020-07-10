@@ -15,8 +15,9 @@ class CPU(Player):
 
         CHECK_BET_SIZE = 0
         # implies cpu is going first
-        if not player_action:
+        if not player_action or player_action == 'check':
             self.bet(CHECK_BET_SIZE)
+            print(f'CPU checks.')
         else:
             self.call(player_bet_amt)
             print(f'CPU calls {player_bet_amt}.')

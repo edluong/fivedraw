@@ -5,11 +5,12 @@ class CantOverBetError(Exception):
 
 class Player:
     
-    def __init__(self, stack, last_bet = 0, isDealer = False):
+    def __init__(self, stack, last_bet = 0, isDealer = False, last_action = None):
         self.hand = []
         self.stack = stack
         self.isDealer = isDealer
         self.last_bet = last_bet
+        self.last_action = last_action
     
     def __eq__(self, other):
         return self.hand == other.hand

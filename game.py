@@ -165,15 +165,17 @@ class Game:
                 elif action == 'fold':
                     # cpu wins the pot
                     # TODO - needs to get the blinds working
+                    self.player.last_action = action
                     self.cpu.stack += self.pot_size
                     print(f'CPU wins {self.pot_size}\n')
                     self.reset() # soft reset
                     break
                 elif action == 'check':
-                    self.cpu.bet_strategy(0, action) 
+                    self.player.last_action = action
                     self.state = 1 if self.state == 0 else 3
                     break
                 elif action == 'bet':
+                    self.player.last_action = action
                     while True:
                         bet_amount = input('Bet >>> ')
                         try:
@@ -292,13 +294,14 @@ class Game:
 
         # TODO - player has option to raise
         self.betting_round()
+        self.cpu.bet_strategy(self.player.last_bet, self.player.last_action)
 
         # checking if player folded
         if self.state > 0: 
             self.discard_choice()
             # self.cpu.discard_strat()
             self.betting_round() # folding will trigger state to be 0
-            self.cpu.bet_strategy()
+            self.cpu.bet_strategy(self.player.last_bet, self.player.last_action)
             if self.state > 0:
                 self.payout()
                 self.check_busted()
