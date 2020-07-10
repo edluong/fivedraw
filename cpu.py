@@ -12,6 +12,7 @@ class CPU(Player):
         return self.bet(player_bet_amt)
     
     def bet_strategy(self, player_bet_amt = 0, player_action = None):
+        print(f'CPU bet strategy!')
 
         CHECK_BET_SIZE = 0
         # implies cpu is going first

@@ -20,6 +20,7 @@ class Player:
             raise CantOverBetError
         self.stack-= amount
         self.last_bet = amount
+        print(f'last bet {self.last_bet}')
         return amount
     
     def call(self, current_bet):
@@ -27,6 +28,7 @@ class Player:
             self.bet(self.stack)
             self.last_bet = self.stack
         else:
+            print(f'current bet - last bet: {current_bet - self.last_bet}')
             self.bet(current_bet - self.last_bet)
             self.last_bet = current_bet - self.last_bet
         

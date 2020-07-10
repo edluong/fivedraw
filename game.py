@@ -295,6 +295,8 @@ class Game:
         # TODO - player has option to raise
         self.betting_round()
         self.cpu.bet_strategy(self.player.last_bet, self.player.last_action)
+        print(f'cpu last bet: {self.cpu.last_bet}')
+        self._bet_state_management(self.cpu.last_bet)
 
         # checking if player folded
         if self.state > 0: 
@@ -302,6 +304,7 @@ class Game:
             # self.cpu.discard_strat()
             self.betting_round() # folding will trigger state to be 0
             self.cpu.bet_strategy(self.player.last_bet, self.player.last_action)
+            self._bet_state_management(self.cpu.last_bet)
             if self.state > 0:
                 self.payout()
                 self.check_busted()
