@@ -285,24 +285,16 @@ class Game:
         # reset deck
         self.deck.reload()
     
-    def round(self):
-
-        # always happens in this order
-        self.pay_blinds()
-        self.deal_cards()
-
-        if self.cpu.isDealer:
-            self.cpu.call(self.current_bet)
-            self.pot_size += self.cpu.last_bet
-            self._display(self.cpu, 'c')
-            print('CPU Calls.')
-            
-            self.betting_round()
-        else:
-            self.betting_round()
-            self.cpu.bet_strategy()
+    def _round_cpu_dealer(self):
+        '''
+            Order of the round if cpu is dealer
+        '''
+        self.cpu.call(self.current_bet)
+        self.pot_size += self.cpu.last_bet
+        print('CPU Calls.\n')
+        print(f'Pot Size: {self.pot_size}\n')
         
-
+        self.betting_round()
         if self.state > 0: 
             self.discard_choice()
             # self.cpu.discard_strat()
@@ -315,3 +307,32 @@ class Game:
                 return
         else:
             return
+    
+    def _round_player_dealer(self):
+        self.betting_round()
+        self.cpu.bet_strategy()
+        if self.state > 0: 
+            self.discard_choice()
+            # self.cpu.discard_strat()
+            self.betting_round() # folding will trigger state to be 0
+            # self.cpu.bet_strat()
+            if self.state > 0:
+                self.payout()
+                self.check_busted()
+            else:
+                return
+        else:
+            return
+
+        
+
+    def round(self):
+
+        # always happens in this order
+        self.pay_blinds()
+        self.deal_cards()
+
+        if self.cpu.isDealer:
+            self._round_cpu_dealer()
+        else:
+           self._round_player_dealer()
