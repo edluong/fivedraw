@@ -176,16 +176,25 @@ class Game:
                             print(f'Player bets {bet}.')
                             # pot should increase by the amount of the bet of the player
                             self.pot_size += bet
+                            
+                            if self.current_bet < bet:
+                                self.current_bet = bet
 
                             self.cpu.bet_strategy(bet, action)
                             print(f'CPU calls {bet}.')
                             # pot should increase by the amount of the bet
                             self.pot_size += bet
+
+                            if self.current_bet < bet:
+                                self.current_bet = bet
+                            
                             break
                         except ValueError:
                             print(f'{bet_amount} was not an integer!')
                     self.state = 1 if self.state == 0 else 3
                     break
+                elif action == 'cb':
+                    print(f'Current Bet: {self.current_bet}')
                 else:
                     raise ValueError
             except ValueError as e:
@@ -286,6 +295,7 @@ class Game:
             self.cpu.call(self.current_bet)
             self.pot_size += self.cpu.last_bet
             self._display(self.cpu, 'c')
+            print('CPU Calls.')
             
             self.betting_round()
         else:
