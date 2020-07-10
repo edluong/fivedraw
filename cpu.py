@@ -18,7 +18,8 @@ class CPU(Player):
         if not player_action:
             self.bet(CHECK_BET_SIZE)
         else:
-            self.bet(player_bet_amt)
+            self.call(player_bet_amt)
+            print(f'CPU calls {player_bet_amt}.')
 
         
         

@@ -46,7 +46,7 @@ class Game:
         
         # hand details
         _hand_msg = CPU_HAND if playertype == 'c' else PLAYER_HAND
-        print(f'\n{_hand_msg}', end='\n')
+        print(f'{_hand_msg}', end='\n')
         player.print_hand()
 
         # get the ranking of the hand
@@ -64,7 +64,7 @@ class Game:
         elif self.cpu.isDealer:
             print('CPU is dealer.')
         
-        print(f'Pot Size {self.pot_size}')
+        print(f'Pot: {self.pot_size}\n')
     
     def deal_cards(self):
         # deal the cards out the the players
@@ -94,7 +94,8 @@ class Game:
         self.deck.shuffle()
 
         # pick dealer
-        players = [self.player, self.cpu]
+        #players = [self.player, self.cpu]
+        players = [self.cpu]
         dealer = random.choice(players)
         dealer.isDealer = True
 
@@ -104,9 +105,15 @@ class Game:
         if self.player.isDealer == True:
             self.player.bet(self.small_blind)
             self.cpu.bet(self.big_blind)
+
+            print(f'Player pays small blind for {self.small_blind}.')
+            print(f'CPU pays big blind for {self.big_blind}.\n')
         else:
             self.cpu.bet(self.small_blind)
             self.player.bet(self.big_blind)
+
+            print(f'CPU pays small blind for {self.small_blind}.')
+            print(f'Player pays big blind for {self.big_blind}.\n')
 
         self.pot_size += self.small_blind
         self.pot_size += self.big_blind
@@ -171,23 +178,10 @@ class Game:
                         bet_amount = input('Bet >>> ')
                         try:
                             bet = int(bet_amount)
-
                             self.player.bet(bet)
                             print(f'Player bets {bet}.')
                             # pot should increase by the amount of the bet of the player
-                            self.pot_size += bet
-                            
-                            if self.current_bet < bet:
-                                self.current_bet = bet
-
-                            self.cpu.bet_strategy(bet, action)
-                            print(f'CPU calls {bet}.')
-                            # pot should increase by the amount of the bet
-                            self.pot_size += bet
-
-                            if self.current_bet < bet:
-                                self.current_bet = bet
-                            
+                            self._bet_state_management(bet)
                             break
                         except ValueError:
                             print(f'{bet_amount} was not an integer!')
@@ -289,17 +283,22 @@ class Game:
         '''
             Order of the round if cpu is dealer
         '''
+        # CPU calls the blinds
         self.cpu.call(self.current_bet)
         self.pot_size += self.cpu.last_bet
-        print('CPU Calls.\n')
-        print(f'Pot Size: {self.pot_size}\n')
-        
+        print('CPU Calls.')
+        print(f'Pot: {self.pot_size}')
+        print(f'CPU Stack: {self.cpu.stack}\n')
+
+        # TODO - player has option to raise
         self.betting_round()
+
+        # checking if player folded
         if self.state > 0: 
             self.discard_choice()
             # self.cpu.discard_strat()
             self.betting_round() # folding will trigger state to be 0
-            # self.cpu.bet_strat()
+            self.cpu.bet_strategy()
             if self.state > 0:
                 self.payout()
                 self.check_busted()
@@ -324,15 +323,23 @@ class Game:
         else:
             return
 
-        
-
     def round(self):
-
         # always happens in this order
         self.pay_blinds()
         self.deal_cards()
 
+        # choose the round based on who is dealer
         if self.cpu.isDealer:
             self._round_cpu_dealer()
         else:
            self._round_player_dealer()
+    
+
+    def _bet_state_management(self, bet):
+        '''
+            helper method to make sure the pot
+            and current bet are in sync
+        '''
+        self.pot_size += bet
+        if self.current_bet < bet:
+            self.current_bet = bet
