@@ -294,20 +294,14 @@ class Game:
         self._bet_state_management(self.cpu)
         print(f'Pot: {self.pot_size}')
         print(f'CPU Stack: {self.cpu.stack}\n')
-        self.cpu.last_bet = 0
-        self.cpu.last_action = None
-        self.player.last_bet = 0
-        self.player.last_action = None
+
 
         # player has the chance to either raise or check the blinds
         # TODO - player has option to raise
         self.betting_round()
         self.cpu.bet_strategy(self.current_bet, self.player.last_action)
         self._bet_state_management(self.cpu)
-        self.cpu.last_bet = 0
-        self.cpu.last_action = None
-        self.player.last_bet = 0
-        self.player.last_action = None
+
 
         # betting round 2
         # checking if player folded
@@ -318,10 +312,6 @@ class Game:
             self.cpu.bet_strategy(self.current_bet, self.player.last_action)
             self._bet_state_management(self.cpu)
             print(f'Pot: {self.pot_size}')
-            self.cpu.last_bet = 0
-            self.cpu.last_action = None
-            self.player.last_bet = 0
-            self.player.last_action = None
 
             if self.state > 0:
                 self.payout()
@@ -368,3 +358,9 @@ class Game:
             self.pot_size += player.last_bet
             if self.current_bet < player.last_bet:
                 self.current_bet = player.last_bet
+        
+        # reset the tracker vars
+        self.cpu.last_bet = 0
+        self.cpu.last_action = None
+        self.player.last_bet = 0
+        self.player.last_action = None
