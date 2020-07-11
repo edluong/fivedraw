@@ -183,7 +183,7 @@ class Game:
                             self.player.bet(bet)
                             print(f'Player bets {bet}.')
                             # pot should increase by the amount of the bet of the player
-                            self._bet_state_management(bet)
+                            self._bet_state_management(self.player)
                             break
                         except ValueError:
                             print(f'{bet_amount} was not an integer!')
@@ -274,6 +274,10 @@ class Game:
         # reset players stuff
         self.player.hand.clear()
         self.cpu.hand.clear()
+        self.player.last_action = None
+        self.cpu.last_action = None
+        self.player.last_bet = None
+        self.cpu.last_action = None
         if type == 'full':
             self.player.stack = self.starting_stack
             self.cpu.stack = self.starting_stack
@@ -286,25 +290,39 @@ class Game:
             Order of the round if cpu is dealer
         '''
         # CPU calls the blinds
-        self.cpu.call(self.current_bet)
-        self.pot_size += self.cpu.last_bet
-        print('CPU Calls.')
+        self.cpu.bet_strategy(self.current_bet, self.player.last_action)
+        self._bet_state_management(self.cpu)
         print(f'Pot: {self.pot_size}')
         print(f'CPU Stack: {self.cpu.stack}\n')
+        self.cpu.last_bet = 0
+        self.cpu.last_action = None
+        self.player.last_bet = 0
+        self.player.last_action = None
 
+        # player has the chance to either raise or check the blinds
         # TODO - player has option to raise
         self.betting_round()
-        self.cpu.bet_strategy(self.player.last_bet, self.player.last_action)
-        print(f'cpu last bet: {self.cpu.last_bet}')
-        self._bet_state_management(self.cpu.last_bet)
+        self.cpu.bet_strategy(self.current_bet, self.player.last_action)
+        self._bet_state_management(self.cpu)
+        self.cpu.last_bet = 0
+        self.cpu.last_action = None
+        self.player.last_bet = 0
+        self.player.last_action = None
 
+        # betting round 2
         # checking if player folded
         if self.state > 0: 
             self.discard_choice()
             # self.cpu.discard_strat()
             self.betting_round() # folding will trigger state to be 0
-            self.cpu.bet_strategy(self.player.last_bet, self.player.last_action)
-            self._bet_state_management(self.cpu.last_bet)
+            self.cpu.bet_strategy(self.current_bet, self.player.last_action)
+            self._bet_state_management(self.cpu)
+            print(f'Pot: {self.pot_size}')
+            self.cpu.last_bet = 0
+            self.cpu.last_action = None
+            self.player.last_bet = 0
+            self.player.last_action = None
+
             if self.state > 0:
                 self.payout()
                 self.check_busted()
@@ -341,11 +359,12 @@ class Game:
            self._round_player_dealer()
     
 
-    def _bet_state_management(self, bet):
+    def _bet_state_management(self, player):
         '''
             helper method to make sure the pot
             and current bet are in sync
         '''
-        self.pot_size += bet
-        if self.current_bet < bet:
-            self.current_bet = bet
+        if player.last_action != 'check':
+            self.pot_size += player.last_bet
+            if self.current_bet < player.last_bet:
+                self.current_bet = player.last_bet
