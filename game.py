@@ -155,7 +155,21 @@ class Game:
         self._draw_hand(self.player.hand, self.deck, len(_choices))
         self._display(self.player) # display the cards to the player
         self._display(self.cpu, 'c')  # TODO - remove when dealer functionality is in
-  
+    
+    def cpu_discard(self):
+        _indexes = [1, 2, 3, 4, 5]
+        num_discards = random.randint(0, 5)
+        _choices = random.sample(_indexes, num_discards) # random select without replacement
+
+        if _choices:
+            self.cpu.discard(_choices)
+        
+        self._draw_hand(self.cpu.hand, self.deck, len(_choices))
+        self._display(self.player)
+        self._display(self.cpu, 'c')
+
+        print(f'CPU discards {num_discards} card(s).')
+
     def betting_round(self):
         while True:
             action = input('>>> ')
@@ -307,7 +321,7 @@ class Game:
         # checking if player folded
         if self.state > 0: 
             self.discard_choice()
-            # self.cpu.discard_strat()
+            self.cpu_discard()
             self.betting_round() # folding will trigger state to be 0
             self.cpu.bet_strategy(self.current_bet, self.player.last_action)
             self._bet_state_management(self.cpu)
