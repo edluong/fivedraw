@@ -95,7 +95,7 @@ class Game:
 
         # pick dealer
         #players = [self.player, self.cpu]
-        players = [self.cpu]
+        players = [self.player]
         dealer = random.choice(players)
         dealer.isDealer = True
 
@@ -336,13 +336,23 @@ class Game:
             return
     
     def _round_player_dealer(self):
+
+        # player can call the blind, raise or fold
         self.betting_round()
-        self.cpu.bet_strategy()
-        if self.state > 0: 
+        self.cpu.bet_strategy(self.current_bet, self.player.last_action)
+
+        # check if player folded
+        # continue to discarding cards
+        if self.state > 0:
+            self.cpu_discard()
             self.discard_choice()
-            # self.cpu.discard_strat()
-            self.betting_round() # folding will trigger state to be 0
-            # self.cpu.bet_strat()
+            self.cpu.bet_strategy(self.current_bet, self.player.last_action)
+            self._bet_state_management(self.cpu)
+            self.betting_round()
+            self.cpu.bet_strategy(self.current_bet, self.player.last_action) # player may bet
+            self._bet_state_management(self.cpu)
+            print(f'Pot: {self.pot_size}')
+
             if self.state > 0:
                 self.payout()
                 self.check_busted()
@@ -350,6 +360,24 @@ class Game:
                 return
         else:
             return
+
+
+
+
+        # self.betting_round()
+        # self.cpu.bet_strategy()
+        # if self.state > 0: 
+        #     self.discard_choice()
+        #     # self.cpu.discard_strat()
+        #     self.betting_round() # folding will trigger state to be 0
+        #     # self.cpu.bet_strat()
+        #     if self.state > 0:
+        #         self.payout()
+        #         self.check_busted()
+        #     else:
+        #         return
+        # else:
+        #     return
 
     def round(self):
         # always happens in this order
