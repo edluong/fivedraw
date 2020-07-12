@@ -188,6 +188,13 @@ class Game:
                     self.player.last_action = action
                     self.state = 1 if self.state == 0 else 3
                     break
+                elif action == 'call':
+                    self.player.last_action = 'call'
+                    self.state = 1 if self.state == 0 else 3
+                    self.player.call(self.current_bet)
+                    print(f'Player calls a bet of {self.current_bet}.')
+                    self._bet_state_management(self.player)
+                    break
                 elif action == 'bet':
                     self.player.last_action = action
                     while True:
@@ -240,7 +247,7 @@ class Game:
                     print('there is something wrong...')
 
             print(f'{_win_player_text} wins with {_win_desc}!')
-            print(f'{_win_player_text} wins {self.pot_size} from the pot')
+            print(f'{_win_player_text} wins {self.pot_size} from the pot\n')
             print(f'Player Stack Size: {self.player.stack}')
             print(f'CPU Stack Size: {self.cpu.stack}\n')
 
@@ -299,6 +306,13 @@ class Game:
         # reset deck
         self.deck.reload()
     
+    def reset_bet_trackers(self):
+        # reset the tracker vars
+        self.cpu.last_bet = 0
+        self.cpu.last_action = None
+        self.player.last_bet = 0
+        self.player.last_action = None
+
     def _round_cpu_dealer(self):
         '''
             Order of the round if cpu is dealer
@@ -315,6 +329,7 @@ class Game:
         self.betting_round()
         self.cpu.bet_strategy(self.current_bet, self.player.last_action)
         self._bet_state_management(self.cpu)
+        self.reset_bet_trackers()
 
 
         # betting round 2
@@ -325,6 +340,7 @@ class Game:
             self.betting_round() # folding will trigger state to be 0
             self.cpu.bet_strategy(self.current_bet, self.player.last_action)
             self._bet_state_management(self.cpu)
+            self.reset_bet_trackers()
             print(f'Pot: {self.pot_size}')
 
             if self.state > 0:
@@ -339,45 +355,35 @@ class Game:
 
         # player can call the blind, raise or fold
         self.betting_round()
-        self.cpu.bet_strategy(self.current_bet, self.player.last_action)
-
-        # check if player folded
-        # continue to discarding cards
-        if self.state > 0:
+        if self.state > 0: # verify player folded
+            # continue the round
+            self.cpu.bet_strategy(self.current_bet, self.player.last_action)
+            self._bet_state_management(self.cpu) # used to sync pot and bets
+            self.reset_bet_trackers()
+            
+            # continue to discarding cards
             self.cpu_discard()
             self.discard_choice()
-            self.cpu.bet_strategy(self.current_bet, self.player.last_action)
+
+            # betting round after discarding
+            self.cpu.bet_strategy(self.current_bet, self.player.last_action)  # level 0 always check
             self._bet_state_management(self.cpu)
             self.betting_round()
-            self.cpu.bet_strategy(self.current_bet, self.player.last_action) # player may bet
-            self._bet_state_management(self.cpu)
-            print(f'Pot: {self.pot_size}')
 
             if self.state > 0:
+                self.cpu.bet_strategy(self.current_bet, self.player.last_action) # player may bet
+                self._bet_state_management(self.cpu) # used at the end of betting round for clean up
+                self.reset_bet_trackers()
+                print(f'Pot: {self.pot_size}')
+
+                # payout the winner
+                # checks if the game can continue
                 self.payout()
                 self.check_busted()
             else:
                 return
         else:
             return
-
-
-
-
-        # self.betting_round()
-        # self.cpu.bet_strategy()
-        # if self.state > 0: 
-        #     self.discard_choice()
-        #     # self.cpu.discard_strat()
-        #     self.betting_round() # folding will trigger state to be 0
-        #     # self.cpu.bet_strat()
-        #     if self.state > 0:
-        #         self.payout()
-        #         self.check_busted()
-        #     else:
-        #         return
-        # else:
-        #     return
 
     def round(self):
         # always happens in this order
@@ -400,9 +406,3 @@ class Game:
             self.pot_size += player.last_bet
             if self.current_bet < player.last_bet:
                 self.current_bet = player.last_bet
-        
-        # reset the tracker vars
-        self.cpu.last_bet = 0
-        self.cpu.last_action = None
-        self.player.last_bet = 0
-        self.player.last_action = None

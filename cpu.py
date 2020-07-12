@@ -9,8 +9,7 @@ class CPU(Player):
             cpu first to act -> always check
         '''
         CHECK_BET_SIZE = 0
-        # implies cpu is going first
-        if player_action == 'check':
+        if player_action in {'check','call', None}:
             self.bet(CHECK_BET_SIZE)
             print(f'CPU checks.')
         else:
