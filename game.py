@@ -95,7 +95,7 @@ class Game:
 
         # pick dealer
         #players = [self.player, self.cpu]
-        players = [self.player]
+        players = [self.cpu]
         dealer = random.choice(players)
         dealer.isDealer = True
 
@@ -111,12 +111,15 @@ class Game:
         else:
             self.cpu.bet(self.small_blind)
             self.player.bet(self.big_blind)
+            self.player.last_action = 'blind'
 
             print(f'CPU pays small blind for {self.small_blind}.')
             print(f'Player pays big blind for {self.big_blind}.\n')
 
-        self.pot_size += self.small_blind
-        self.pot_size += self.big_blind
+        # self.pot_size += self.small_blind
+        # self.pot_size += self.big_blind
+        self._bet_state_management(self.cpu)
+        self._bet_state_management(self.player)
 
         self.current_bet = self.big_blind
 
