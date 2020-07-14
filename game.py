@@ -239,12 +239,12 @@ class Game:
                 self.player.stack += split_pot
                 self.cpu.stack += split_pot
             else:
-                if _winner.hand == self.player.hand:
+                if _winner == self.player:
                     _win_player_text = 'Player'  
-                    self.player.stack += self.pot_size
-                elif _winner.hand == self.cpu.hand: 
+                    self.player.stack = self.player.stack + self.pot_size
+                elif _winner == self.cpu: 
                     _win_player_text = 'CPU'
-                    self.cpu.stack += self.pot_size
+                    self.cpu.stack = self.cpu.stack + self.pot_size
                 else:
                     print('there is something wrong...')
 

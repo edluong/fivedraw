@@ -122,24 +122,25 @@ class TestGame(unittest.TestCase):
     def test_payout_two_winners(self, mocked_winners):
         # set up
         self.game.pot_size = 100
+        self.game.state = 3
+
         p1 = self.players.get('tied_hand_two_pair')
         p2 = self.players.get('tied_hand_two_pair_two')
         mocked_winners.return_value = ([p1, p2], 'two pair')
 
         self.game.payout()
-        print(p1.stack_size)
         self.assertEqual(self.game.player.stack, 150)
         self.assertEqual(self.game.cpu.stack, 150)
         self.assertEqual(self.game.pot_size, 0)
         self.assertEqual(self.game.state, 4)
     
-    @patch('game.winninghand')
-    def test_payout_player(self, mocked_winninghand):
+    def test_payout_player(self):
         # set up
         self.game.pot_size = 100
-        p1 = self.players.get('trips')
-        self.game.player.set_hand(hands.get('trips'))
-        mocked_winninghand.return_value = (p1, 'trips')
+        self.game.state = 3
+
+        self.game.cpu.hand = hands.get('two_pair')
+        self.game.player.hand = hands.get('trips')
 
         self.game.payout()
 
@@ -148,16 +149,13 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.pot_size, 0)
         self.assertEqual(self.game.state, 4)
     
-    @patch('game.winninghand')
-    def test_payout_cpu(self, mocked_winninghand):
+    def test_payout_cpu(self):
         # set up
         self.game.pot_size = 100
-        p1 = self.players.get('trips')
-        self.game.cpu.set_hand(hands.get('trips'))
-        mocked_winninghand.return_value = (p1, 'trips')
-
+        self.game.state = 3
+        self.game.cpu.hand = hands.get('trips')
+        self.game.player.hand = hands.get('two_pair')
         self.game.payout()
-
         self.assertEqual(self.game.player.stack, 100)
         self.assertEqual(self.game.cpu.stack, 200)
         self.assertEqual(self.game.pot_size, 0)
@@ -242,5 +240,6 @@ class TestGame(unittest.TestCase):
     def test_reset_game(self):
         self.game.reset_game()
         self.assertEqual(0, self.game.pot_size)
+
     if __name__ == '__main__':
         unittest.main()
