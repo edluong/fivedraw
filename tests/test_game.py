@@ -91,13 +91,11 @@ class TestGame(unittest.TestCase):
             self.game.betting_round()
     
     @patch('builtins.input', return_value='check', autospec=True)
-    @patch('cpu.CPU.cpu_decision')
-    def test_betting_round_check(self, m_cpu_decision, m_input):
+    def test_betting_round_check(self, m_input):
         self.game.state = 0
         self.game.betting_round()
-        m_cpu_decision.assert_called_once()
-        m_cpu_decision.assert_called_with('check', 0)
         self.assertEqual(self.game.state, 1)
+        self.assertEqual(self.game.player.last_action, 'check')
         
     @patch('builtins.input', return_value='fold')
     @patch('game.Game.reset')
@@ -110,38 +108,39 @@ class TestGame(unittest.TestCase):
     # example of multiple inputs 
     # https://stackoverflow.com/a/56498519/4376173
     @patch('builtins.input', side_effect=['bet', '10'])
-    @patch('cpu.CPU.cpu_decision')
-    def test_betting_round_bet(self, m_cpu_decision, m_input):
+    def test_betting_round_bet(self, m_input):
         self.game.betting_round()
         self.assertEqual(self.game.player.stack, 90) # starting stack of 100 - bet of 10
-        m_cpu_decision.assert_called_once()
-        m_cpu_decision.assert_called_with('bet', 10)
-        self.assertEqual(self.game.pot_size, 20) # level 0 cpu will copy the bet
+        self.assertEqual(self.game.pot_size, 10) # level 0 cpu will copy the bet
+        self.assertEqual(self.game.player.last_bet, 10)
+        self.assertEqual(self.game.player.last_action, 'bet')
         self.assertEqual(self.game.state, 1)
+        self.assertEqual(self.game.current_bet, 10)
 
 
     @patch('game.winninghand')
     def test_payout_two_winners(self, mocked_winners):
         # set up
         self.game.pot_size = 100
+        self.game.state = 3
+
         p1 = self.players.get('tied_hand_two_pair')
         p2 = self.players.get('tied_hand_two_pair_two')
         mocked_winners.return_value = ([p1, p2], 'two pair')
 
         self.game.payout()
-        print(p1.stack_size)
         self.assertEqual(self.game.player.stack, 150)
         self.assertEqual(self.game.cpu.stack, 150)
         self.assertEqual(self.game.pot_size, 0)
         self.assertEqual(self.game.state, 4)
     
-    @patch('game.winninghand')
-    def test_payout_player(self, mocked_winninghand):
+    def test_payout_player(self):
         # set up
         self.game.pot_size = 100
-        p1 = self.players.get('trips')
-        self.game.player.set_hand(hands.get('trips'))
-        mocked_winninghand.return_value = (p1, 'trips')
+        self.game.state = 3
+
+        self.game.cpu.hand = hands.get('two_pair')
+        self.game.player.hand = hands.get('trips')
 
         self.game.payout()
 
@@ -150,16 +149,13 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.pot_size, 0)
         self.assertEqual(self.game.state, 4)
     
-    @patch('game.winninghand')
-    def test_payout_cpu(self, mocked_winninghand):
+    def test_payout_cpu(self):
         # set up
         self.game.pot_size = 100
-        p1 = self.players.get('trips')
-        self.game.cpu.set_hand(hands.get('trips'))
-        mocked_winninghand.return_value = (p1, 'trips')
-
+        self.game.state = 3
+        self.game.cpu.hand = hands.get('trips')
+        self.game.player.hand = hands.get('two_pair')
         self.game.payout()
-
         self.assertEqual(self.game.player.stack, 100)
         self.assertEqual(self.game.cpu.stack, 200)
         self.assertEqual(self.game.pot_size, 0)
@@ -244,5 +240,6 @@ class TestGame(unittest.TestCase):
     def test_reset_game(self):
         self.game.reset_game()
         self.assertEqual(0, self.game.pot_size)
+
     if __name__ == '__main__':
         unittest.main()
