@@ -110,14 +110,14 @@ class TestGame(unittest.TestCase):
     # example of multiple inputs 
     # https://stackoverflow.com/a/56498519/4376173
     @patch('builtins.input', side_effect=['bet', '10'])
-    @patch('cpu.CPU.cpu_decision')
-    def test_betting_round_bet(self, m_cpu_decision, m_input):
+    def test_betting_round_bet(self, m_input):
         self.game.betting_round()
         self.assertEqual(self.game.player.stack, 90) # starting stack of 100 - bet of 10
-        m_cpu_decision.assert_called_once()
-        m_cpu_decision.assert_called_with('bet', 10)
-        self.assertEqual(self.game.pot_size, 20) # level 0 cpu will copy the bet
+        self.assertEqual(self.game.pot_size, 10) # level 0 cpu will copy the bet
+        self.assertEqual(self.game.player.last_bet, 10)
+        self.assertEqual(self.game.player.last_action, 'bet')
         self.assertEqual(self.game.state, 1)
+        self.assertEqual(self.game.current_bet, 10)
 
 
     @patch('game.winninghand')
