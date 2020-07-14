@@ -109,6 +109,8 @@ class TestGame(unittest.TestCase):
     # https://stackoverflow.com/a/56498519/4376173
     @patch('builtins.input', side_effect=['bet', '10'])
     def test_betting_round_bet(self, m_input):
+        #set up 
+        self.game.cpu.last_action = 'check'
         self.game.betting_round()
         self.assertEqual(self.game.player.stack, 90) # starting stack of 100 - bet of 10
         self.assertEqual(self.game.pot_size, 10) # level 0 cpu will copy the bet
