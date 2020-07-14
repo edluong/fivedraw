@@ -91,13 +91,11 @@ class TestGame(unittest.TestCase):
             self.game.betting_round()
     
     @patch('builtins.input', return_value='check', autospec=True)
-    @patch('cpu.CPU.cpu_decision')
-    def test_betting_round_check(self, m_cpu_decision, m_input):
+    def test_betting_round_check(self, m_input):
         self.game.state = 0
         self.game.betting_round()
-        m_cpu_decision.assert_called_once()
-        m_cpu_decision.assert_called_with('check', 0)
         self.assertEqual(self.game.state, 1)
+        self.assertEqual(self.game.player.last_action, 'check')
         
     @patch('builtins.input', return_value='fold')
     @patch('game.Game.reset')
