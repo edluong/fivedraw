@@ -104,6 +104,7 @@ class Game:
         if self.player.isDealer == True:
             self.player.bet(self.small_blind)
             self.cpu.bet(self.big_blind)
+            self.cpu.last_action = 'blind'
 
             print(f'Player pays small blind for {self.small_blind}.')
             print(f'CPU pays big blind for {self.big_blind}.\n')
@@ -198,6 +199,8 @@ class Game:
                     self._bet_state_management(self.player)
                     break
                 elif action == 'bet':
+                    if self.cpu.last_action not in  {'blind','check'}:
+                        raise ValueError
                     self.player.last_action = action
                     while True:
                         bet_amount = input('Bet >>> ')
