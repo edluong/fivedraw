@@ -94,8 +94,7 @@ class Game:
         self.deck.shuffle()
 
         # pick dealer
-        #players = [self.player, self.cpu]
-        players = [self.cpu]
+        players = [self.player, self.cpu]
         dealer = random.choice(players)
         dealer.isDealer = True
 
@@ -398,7 +397,10 @@ class Game:
             self._round_cpu_dealer()
         else:
            self._round_player_dealer()
-    
+
+        # switch states for dealer
+        self.cpu.isDealer = not self.cpu.isDealer
+        self.player.isDealer = not self.player.isDealer
 
     def _bet_state_management(self, player):
         '''
